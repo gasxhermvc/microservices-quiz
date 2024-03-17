@@ -1,0 +1,25 @@
+version: '3.7'
+services:
+  cpn-quiz-db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./cpn_quiz_db:/var/lib/postgresql/data
+
+networks:
+  default:
+    name: cpn-quiz
+
+volumes:
+  cpn_quiz_db:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './cpn_quiz_db'
+    external: false

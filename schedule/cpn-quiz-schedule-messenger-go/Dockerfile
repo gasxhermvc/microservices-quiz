@@ -1,0 +1,28 @@
+FROM golang:1.21-alpine as builder
+
+RUN apk update && apk add --no-cache git && apk --no-cache add ca-certificates
+
+ENV GO111MODULE=on \
+  CGO_ENABLED=0 \
+  GOOS=linux \
+  GOARCH=amd64
+
+WORKDIR /app
+
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
+
+COPY . .
+
+RUN go build -trimpath -ldflags "-s -w -extldflags '-static'" -o main app/main.go
+
+FROM scratch
+
+# COPY --from=builder /app/main .
+# COPY --from=builder /app/config ./config/
+# COPY --from=builder /app/.env.yml ./.env.yml
+# COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+
+ENV TZ=Asia/Bangkok
+ENTRYPOINT ["./main", "prod"]

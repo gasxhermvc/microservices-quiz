@@ -1,0 +1,55 @@
+_format_version: "1.1"
+
+services:
+  # Keycloak
+  - name: cpn-quiz-keycloak
+    url: http://cpn-quiz-keycloak:8080
+    routes:
+      - name: cpn-quiz-keycloak
+        paths:
+          - /sso
+        strip_path: true
+        hosts:
+          - cpn-quiz-dev.gasxhermvc.local
+
+  # CPNQuiz API
+  - name: cpn-quiz-api-authentication
+    url: http://cpn-quiz-api-authentication/cpn-quiz-api-authentication
+    routes:
+      - name: cpn-quiz-api-authentication
+        paths:
+          - /api/cpn-quiz-api-authentication
+        strip_path: true
+        hosts:
+          - cpn-quiz-dev.gasxhermvc.local
+
+  - name: cpn-quiz-api-file-manage
+    url: http://cpn-quiz-api-file-manage/cpn-quiz-api-file-manage
+    routes:
+      - name: cpn-quiz-api-file-manage
+        paths:
+          - /api/cpn-quiz-api-file-manage
+        strip_path: true
+        hosts:
+          - cpn-quiz-dev.gasxhermvc.local
+
+  - name: cpn-quiz-api-mailer
+    url: http://cpn-quiz-api-mailer/cpn-quiz-api-mailer
+    routes:
+      - name: cpn-quiz-api-mailer
+        paths:
+          - /api/cpn-quiz-api-mailer
+        strip_path: true
+        hosts:
+          - cpn-quiz-dev.gasxhermvc.local
+
+  # CPNQuiz Schedule
+  # - name: cpn-quiz-schedule-messenger
+  #   url: http://cpn-quiz-schedule-messenger/cpn-quiz-schedule-messenger
+  #   routes:
+  #     - name: cpn-quiz-schedule-messenger
+  #       paths:
+  #         - /api/cpn-quiz-schedule-messenger
+  #       strip_path: true
+  #       hosts:
+  #         - cpn-quiz-dev.gasxhermvc.local

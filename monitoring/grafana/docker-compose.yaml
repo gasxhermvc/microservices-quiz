@@ -1,0 +1,28 @@
+version: '3.7'
+services:
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: grafana
+    restart: always
+    environment:
+      GF_SECURITY_ADMIN_USER: "admin"
+      GF_SECURITY_ADMIN_PASSWORD: "cZ7aPBAL9NKytTdr5Qex"
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./grafana_storage:/var/lib/grafana
+    networks:
+      - cpn-quiz-monitoring
+
+networks:
+  cpn-quiz-monitoring:
+    driver: bridge
+
+volumes:
+  grafana_storage:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './grafana_storage'
+    external: false

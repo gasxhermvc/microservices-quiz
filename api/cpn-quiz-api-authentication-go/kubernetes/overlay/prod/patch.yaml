@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-project-template-go
+spec:
+  selector:
+    matchLabels:
+      app: web-project-template-go
+  template:
+    metadata:
+      labels:
+        app: web-project-template-go
+    spec:
+      containers:
+      - name: primary
+        env:
+        - name: env
+          value: prod
+        resources:
+          limits:
+            memory: 1Gi
+          requests:
+            memory: 256Mi

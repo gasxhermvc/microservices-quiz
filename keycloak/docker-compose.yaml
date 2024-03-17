@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  cpn_quiz_keycload_db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRESQL_DB}
+      POSTGRES_USER: ${POSTGRESQL_USER}
+      POSTGRES_PASS: ${POSTGRESQL_PASS}
+    ports:
+      - '5434:5434'
+    volumes:
+      - ./keycloak_data:/var/lib/postgresql/data
+
+  cpn_quiz_keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: cpn_quiz_keycloak
+    environment:
+      PROXY_ADDRESS_FORWARDING: true
+      KC_HEALTH_ENABLED: true
+      KC_METRICS_ENABLED: true
+      KC_LOG_LEVEL: debug
+      KC_DB: postgres
+      KC_DB_URL: 'jdbc:postgresql://cpn_quiz_keycload_db/keycloak'
+      KC_DB_PORT: 5434
+      KC_DB_USERNAME: ${POSTGRESQL_USER}
+      KC_DB_PASSWORD: ${POSTGRESQL_PASS}
+      KC_DB_SCHEMA: public
+      KC_HOSTNAME: ${KC_HOSTNAME}
+      KC_HTTP_ENABLED: true
+      KC_HOSTNAME_STRICT_HTTPS: false
+      KC_HOSTNAME_STRICT: false
+      KC_PROXY: none
+      HTTP_ADDRESS_FORWARDING: true
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+    command: start
+    volumes:
+      - ./keycloak/realm.json:/opt/keycloak/data/import/realm.json
+    depends_on:
+      - cpn_quiz_keycload_db
+    ports:
+      - '8080:8080'
+    restart: always
+
+networks:
+  default:
+    name: cpn-quiz-keycloak
+
+volumes:
+  keycloak:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './keycloak'
+    external: false
+  keycloak_data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './keycloak_data'
+    external: false

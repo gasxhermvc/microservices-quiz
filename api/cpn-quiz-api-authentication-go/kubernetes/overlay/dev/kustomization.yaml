@@ -1,0 +1,10 @@
+bases:
+- ../../base
+images:
+- name: ${image}
+  newTag: "${imageTag}"
+nameSuffix: -dev
+commonLabels:
+  app: web-project-template-go-dev
+patchesStrategicMerge:
+- patch.yaml

@@ -1,0 +1,23 @@
+version: "3.7"
+services:
+  portainer:
+    image: portainer/portainer-ce:latest
+    ports:
+      - 9443:9443
+    volumes:
+      - ./portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+
+networks:
+  default:
+    name: cpn-quiz
+
+volumes:
+  portainer_data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './portainer_data'
+    external: false

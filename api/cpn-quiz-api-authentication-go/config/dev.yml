@@ -1,0 +1,12 @@
+build:
+  date: 2022/04/07
+  number: 0
+
+service:
+  name: web-project-template
+  port: 80
+  domain: localhost
+  endpoint: /web-project-template
+
+kibana:
+  suffix: web-project-template
