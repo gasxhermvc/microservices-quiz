@@ -1,20 +1,19 @@
 package main
 
 import (
-	"cpn-quiz-schedule-messenger-go/database"
+	// "cpn-quiz-schedule-messenger-go/database"
 	"cpn-quiz-schedule-messenger-go/logger"
-	"cpn-quiz-schedule-messenger-go/task"
 	"fmt"
 	"os"
 	"time"
 	_ "time/tzdata"
 
-	// _helloWorldDelivery "cpn-quiz-schedule-messenger-go/hello-world/delivery"
-	// _helloWorldRepository "cpn-quiz-schedule-messenger-go/hello-world/repository"
-	// _helloWorldUseCase "cpn-quiz-schedule-messenger-go/hello-world/usecase"
+	_helloWorldDelivery "cpn-quiz-schedule-messenger-go/hello-world/delivery"
+	_helloWorldRepository "cpn-quiz-schedule-messenger-go/hello-world/repository"
+	_helloWorldUseCase "cpn-quiz-schedule-messenger-go/hello-world/usecase"
 
 	"github.com/labstack/echo/v4"
-	"github.com/robfig/cron"
+	// "github.com/robfig/cron"
 	config "github.com/spf13/viper"
 	"github.com/tylerb/graceful"
 )
@@ -36,20 +35,20 @@ func init() {
 		panic(err)
 	}
 
-	database.LoadConfig() // Load Config
+	// database.LoadConfig() // Load Config
 }
 
 func main() {
 	// cronJobs := cron.New()
 	// db := database.Database{}
-	db.Log = *log
-	dbPool := db.GetConnectionDB()
+	// db.Log = *log
+	// dbPool := db.GetConnectionDB()
 
 	e := echo.New()
 
-	// helloWorldRepository := _helloWorldRepository.NewHelloWorldRepository(dbPool)
-	// helloWorldUseCase := _helloWorldUseCase.NewHelloWorldUseCase(helloWorldRepository, log)
-	// _helloWorldDelivery.NewHelloWorldDelivery(e, helloWorldUseCase, log)
+	helloWorldRepository := _helloWorldRepository.NewHelloWorldRepository(nil)
+	helloWorldUseCase := _helloWorldUseCase.NewHelloWorldUseCase(helloWorldRepository, log)
+	_helloWorldDelivery.NewHelloWorldDelivery(e, helloWorldUseCase, log)
 
 	// task.NewHelloWorldHandler(helloWorldUseCase, log, cronJobs)
 

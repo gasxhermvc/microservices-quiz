@@ -1,7 +1,8 @@
 package main
 
 import (
-	"cpn-quiz-api-authentication-go/database"
+	// "cpn-quiz-api-authentication-go/database"
+
 	"cpn-quiz-api-authentication-go/logger"
 	"net/http"
 	"time"
@@ -41,13 +42,13 @@ func init() {
 	log.Info("", config.GetString("service.port"))
 
 	//=>ต้อง Connected VPN ด้วยถึงจะเรียก LoadConfig ได้
-	database.LoadConfig()
+	// database.LoadConfig()
 }
 
 func main() {
-	db := database.Database{}
-	db.Log = *log
-	dbConn := db.GetConnectionDB()
+	// db := database.Database{}
+	// db.Log = *log
+	// dbConn := db.GetConnectionDB()
 
 	e := echo.New()
 	e.Use(middleware.CORS())
@@ -63,7 +64,7 @@ func main() {
 		return c.String(http.StatusOK, "Hello, World")
 	})
 
-	helloWorldRepository := _helloWorldRepository.NewHelloWorldRepository(dbConn)
+	helloWorldRepository := _helloWorldRepository.NewHelloWorldRepository(nil)
 	helloWorldUseCase := _helloWorldUseCase.NewHelloWorldUseCase(helloWorldRepository, log)
 
 	_helloWorldDelivery.NewHelloWorldDelivery(e, helloWorldUseCase, log)
