@@ -17,4 +17,5 @@ type UseCaseResult struct {
 	Success    bool
 	Message    string
 	StatusCode int
+	Tx         string
 }

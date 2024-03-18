@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 )
 
-//=>แปลง Object เป็น Json String
+// =>แปลง Object เป็น Json String.
 func JsonSerialize(data any) (string, error) {
 	json, err := json.Marshal(data)
 
@@ -15,7 +15,7 @@ func JsonSerialize(data any) (string, error) {
 	return string(json), nil
 }
 
-//=>แปลง Json String เป็น Object ตาม Struct Type
+// =>แปลง Json String เป็น Object ตาม Struct Type.
 func JsonDeserialize[T any](data string, response T) (T, error) {
 	buf := []byte(data)
 
@@ -26,7 +26,7 @@ func JsonDeserialize[T any](data string, response T) (T, error) {
 	return response, nil
 }
 
-//=>แปลง Struct A เป็น  Struct B
+// =>แปลง Struct A เป็น  Struct B
 func Transform[T any](source any, response T) (T, error) {
 	convertJson, err := JsonSerialize(source)
 	if err != nil {

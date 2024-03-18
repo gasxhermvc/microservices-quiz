@@ -1,12 +1,12 @@
 build:
-  date: 2022/04/07
-  number: 0
+  date: 2024/03/17
+  author: gasxhermvc
 
 service:
-  name: cpn-quiz-api-authentication-go
-  port: 80
+  name: cpn-quiz-api-authentication
+  port: 9999
   domain: localhost
-  endpoint: /cpn-quiz-api-authentication-go
+  endpoint: /cpn-quiz-api-authentication
 
 kibana:
-  suffix: cpn-quiz-api-authentication-go
+  suffix: cpn-quiz-api-authentication

@@ -2,6 +2,7 @@ package utils
 
 import "reflect"
 
+//=>Chunk size array.
 func ChunkSize[T any](slice T, chunkSize int) []T {
 	sliceType := reflect.TypeOf(slice)
 	sliceVal := reflect.ValueOf(slice)
