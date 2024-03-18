@@ -18,7 +18,6 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	config "github.com/spf13/viper"
 	"github.com/tylerb/graceful"
-	// _appDataService "cpn-quiz-api-authentication-go/helpers/app-data-service"
 )
 
 var log = new(logger.PatternLogger).InitLogger("ALL", config.GetString("service.name"), logger.Service, logger.Database)
