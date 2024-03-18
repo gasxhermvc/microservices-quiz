@@ -3,9 +3,13 @@ package database
 import (
 	"cpn-quiz-schedule-messenger-go/logger"
 	"database/sql"
+
 	config "github.com/spf13/viper"
-	"gorm.io/driver/sqlserver"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+
+	//=>for debug sql
+	_logger "gorm.io/gorm/logger"
 )
 
 type Database struct {
@@ -14,6 +18,7 @@ type Database struct {
 }
 
 func (d Database) GetConnectionDB() *gorm.DB {
+	//=>singleton concept for get db instance.
 	if d.DB == nil {
 		d.DB = d.initConnect()
 	}
@@ -22,8 +27,11 @@ func (d Database) GetConnectionDB() *gorm.DB {
 
 func (d Database) initConnect() *gorm.DB {
 	var err error
-	conString := config.GetString("cpm.sqlserver.connection.string")
-	d.DB, err = gorm.Open(sqlserver.Open(conString), &gorm.Config{})
+	dsn := config.GetString("cpm.sqlserver.connection.string")
+	//=>Re-connection to database.
+	d.DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
+		PrepareStmt: true,
+	})
 	if err != nil {
 		panic("database connection failed : " + err.Error())
 	} else {
@@ -34,28 +42,39 @@ func (d Database) initConnect() *gorm.DB {
 }
 
 func LoadConfig() {
+	//=>Get connection string from config
+	dsn := config.GetString("cpm.sqlserver.connection.string")
 
-	conString := config.GetString("cpm.sqlserver.connection.string")
-	db, err := gorm.Open(sqlserver.Open(conString), &gorm.Config{})
+	//=>Open connection to database for get application config from table.
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		Logger: _logger.Default.LogMode(_logger.Info),
+	})
+
 	if err != nil {
 		panic("database connection failed : " + err.Error())
 	}
 
-	result := db.Table("CPM.CPM_CONFIG").Select("[KEY], VALUE")
+	//=>Query to cq_config table
+	result := db.Table("public.cq_config").Select([]string{"key", "value"})
 	rows, err := result.Rows()
+
 	if err == nil {
 		for rows.Next() {
+			//=>Scan key,value from data
 			var key, value string
 			if err = rows.Scan(
 				&key,
 				&value,
 			); err != nil {
-				panic("Error Process Scan LoadMapping " + err.Error())
+				panic("Error process scan to mapping config: " + err.Error())
 			}
 
+			//=>set to config
 			config.Set(key, value)
 		}
 	}
+
+	//=>close if finish work
 	defer func(rows *sql.Rows) {
 		err := rows.Close()
 		if err != nil {
