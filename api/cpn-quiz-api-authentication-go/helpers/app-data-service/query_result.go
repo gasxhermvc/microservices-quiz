@@ -1,8 +1,8 @@
 package appdataservice
 
 import (
+	"cpn-quiz-api-authentication-go/utils"
 	"fmt"
-	"web-project-template/utils"
 )
 
 type QueryResult struct {

@@ -1,2 +1,2 @@
-docker build -t cpn-quiz-api-mailer . --file "Dockerfile.dev"
+docker build -t cpn-quiz-api-authentication . --file "Dockerfile.dev"
 pause

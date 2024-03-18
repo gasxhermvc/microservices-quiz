@@ -1,0 +1,10 @@
+bases:
+- ../../base
+images:
+- name: ${image}
+  newTag: "${imageTag}"
+nameSuffix: -prod
+commonLabels:
+  app: schedule-project-template-go-prod
+patchesStrategicMerge:
+- patch.yaml

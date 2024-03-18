@@ -99,7 +99,7 @@
 	"variable": [
 		{
 			"key": "url",
-			"value": "http://localhost:8080/web-project-template",
+			"value": "http://localhost:8080/cpn-quiz-api-authentication-go",
 			"type": "string"
 		}
 	]

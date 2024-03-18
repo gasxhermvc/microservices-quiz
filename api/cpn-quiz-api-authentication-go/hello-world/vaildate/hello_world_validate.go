@@ -1,9 +1,9 @@
 package vaildate
 
 import (
+	"cpn-quiz-api-authentication-go/constant"
+	"cpn-quiz-api-authentication-go/domain"
 	"unicode"
-	"web-project-template/constant"
-	"web-project-template/domain"
 
 	vaildate "gopkg.in/go-playground/validator.v9"
 )

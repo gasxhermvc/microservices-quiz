@@ -1,6 +1,6 @@
 package restful
 
-import "web-project-template/logger"
+import "cpn-quiz-api-authentication-go/logger"
 
 type Restful struct {
 	log     *logger.PatternLogger

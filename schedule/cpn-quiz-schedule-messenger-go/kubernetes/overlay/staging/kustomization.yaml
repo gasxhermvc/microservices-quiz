@@ -1,0 +1,10 @@
+bases:
+- ../../base
+images:
+- name: ${image}
+  newTag: "${imageTag}"
+nameSuffix: -staging
+commonLabels:
+  app: schedule-project-template-go-staging
+patchesStrategicMerge:
+- patch.yaml

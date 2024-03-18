@@ -1,0 +1,106 @@
+{
+	"info": {
+		"_postman_id": "0ceff324-cbcd-4f92-8e9b-7b964f1ee4c0",
+		"name": "Go-Template-Project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11986345"
+	},
+	"item": [
+		{
+			"name": "HelloWorld",
+			"item": [
+				{
+					"name": "1.HelloWorld",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/test",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"test"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.Hello",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/hello?name=tanasit.a",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"hello"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "tanasit.a"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.Hello-Error",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/hello",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"hello"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "tanasit.a",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:8080/cpn-quiz-api-file-manage-go",
+			"type": "string"
+		}
+	]
+}

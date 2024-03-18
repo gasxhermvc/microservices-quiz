@@ -1,0 +1,12 @@
+build:
+  date: 2022/04/07
+  number: 0
+
+service:
+  name: cpn-quiz-api-file-manage-go
+  port: 80
+  domain: localhost
+  endpoint: /cpn-quiz-api-file-manage-go
+
+kibana:
+  suffix: cpn-quiz-api-file-manage-go

@@ -1,10 +1,10 @@
 package usecase
 
 import (
+	"cpn-quiz-api-authentication-go/domain"
+	"cpn-quiz-api-authentication-go/logger"
+	"cpn-quiz-api-authentication-go/utils"
 	"net/http"
-	"web-project-template/domain"
-	"web-project-template/logger"
-	"web-project-template/utils"
 )
 
 type helloWorldUseCase struct {

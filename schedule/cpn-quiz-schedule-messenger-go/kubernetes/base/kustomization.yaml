@@ -1,0 +1,10 @@
+resources:
+- manifest.yaml
+vars:
+- name: ING_NAME
+  objref:
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    name: schedule-project-template-go
+  fieldref:
+    fieldpath: metadata.name

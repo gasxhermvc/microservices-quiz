@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"web-project-template/domain"
-	_appDataService "web-project-template/helpers/app-data-service"
+	"cpn-quiz-api-authentication-go/domain"
+	_appDataService "cpn-quiz-api-authentication-go/helpers/app-data-service"
 
 	"gorm.io/gorm"
 )

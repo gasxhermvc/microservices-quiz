@@ -3,10 +3,10 @@ build:
   number: 0
 
 service:
-  name: web-project-template
+  name: cpn-quiz-api-authentication-go
   port: 80
   domain: localhost
-  endpoint: /web-project-template
+  endpoint: /cpn-quiz-api-authentication-go
 
 kibana:
-  suffix: web-project-template
+  suffix: cpn-quiz-api-authentication-go

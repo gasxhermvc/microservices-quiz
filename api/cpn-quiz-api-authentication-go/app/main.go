@@ -1,24 +1,24 @@
 package main
 
 import (
+	"cpn-quiz-api-authentication-go/database"
+	"cpn-quiz-api-authentication-go/logger"
 	"net/http"
 	"time"
-	"web-project-template/database"
-	"web-project-template/logger"
 
 	"fmt"
 	"os"
 	_ "time/tzdata"
 
-	_helloWorldDelivery "web-project-template/hello-world/delivery"
-	_helloWorldRepository "web-project-template/hello-world/repository"
-	_helloWorldUseCase "web-project-template/hello-world/usecase"
+	_helloWorldDelivery "cpn-quiz-api-authentication-go/hello-world/delivery"
+	_helloWorldRepository "cpn-quiz-api-authentication-go/hello-world/repository"
+	_helloWorldUseCase "cpn-quiz-api-authentication-go/hello-world/usecase"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	config "github.com/spf13/viper"
 	"github.com/tylerb/graceful"
-	// _appDataService "web-project-template/helpers/app-data-service"
+	// _appDataService "cpn-quiz-api-authentication-go/helpers/app-data-service"
 )
 
 var log = new(logger.PatternLogger).InitLogger("ALL", config.GetString("service.name"), logger.Service, logger.Database)

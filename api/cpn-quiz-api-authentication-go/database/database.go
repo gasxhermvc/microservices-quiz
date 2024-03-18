@@ -1,8 +1,8 @@
 package database
 
 import (
+	"cpn-quiz-api-authentication-go/logger"
 	"database/sql"
-	"web-project-template/logger"
 
 	config "github.com/spf13/viper"
 	"gorm.io/driver/sqlserver"

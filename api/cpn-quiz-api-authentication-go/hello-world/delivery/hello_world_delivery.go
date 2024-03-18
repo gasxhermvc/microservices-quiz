@@ -1,11 +1,11 @@
 package delivery
 
 import (
+	"cpn-quiz-api-authentication-go/constant"
+	"cpn-quiz-api-authentication-go/domain"
+	"cpn-quiz-api-authentication-go/hello-world/vaildate"
 	"net/http"
 	"time"
-	"web-project-template/constant"
-	"web-project-template/domain"
-	"web-project-template/hello-world/vaildate"
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"

@@ -1,0 +1,11 @@
+build:
+  date: 2021/09/01
+  number: 0
+
+service:
+  name: schedule-project-template
+  port: 80
+  domain: localhost
+
+kibana:
+  suffix: schedule-project-template

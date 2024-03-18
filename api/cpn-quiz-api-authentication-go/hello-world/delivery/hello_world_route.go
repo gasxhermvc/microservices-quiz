@@ -1,10 +1,10 @@
 package delivery
 
 import (
+	"cpn-quiz-api-authentication-go/constant"
+	"cpn-quiz-api-authentication-go/domain"
+	"cpn-quiz-api-authentication-go/logger"
 	"net/http"
-	"web-project-template/constant"
-	"web-project-template/domain"
-	"web-project-template/logger"
 
 	"github.com/labstack/echo/v4"
 	config "github.com/spf13/viper"
