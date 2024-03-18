@@ -1,9 +1,9 @@
 package main
 
 import (
-	// "cpn-quiz-api-mailer-go/database"
+	"cpn-quiz-api-mailer-go/database"
+
 	"cpn-quiz-api-mailer-go/logger"
-	"net/http"
 	"time"
 
 	"fmt"
@@ -24,53 +24,51 @@ import (
 var log = new(logger.PatternLogger).InitLogger("ALL", config.GetString("service.name"), logger.Service, logger.Database)
 
 func init() {
+	//=>Get argument of command.
 	env := os.Args[1]
 	log.Info("", fmt.Sprintf("Server start running on %s environment configuration", env))
 
+	//=>Concat string for get file in config directory.
 	config.SetConfigFile(fmt.Sprintf("config/%s.yml", env))
 	if err := config.ReadInConfig(); err != nil {
+		//=>Cannot load configuration.
 		log.Info("", fmt.Sprintf("Fatal error env config (file): %s", env))
 		panic(err)
 	}
 
+	//=>Load env.yml
 	config.SetConfigFile((".env.yml"))
 	if err := config.MergeInConfig(); err != nil {
 		panic(err)
 	}
 
-	log.Info("", config.GetString("service.port"))
-
-	//=>ต้อง Connected VPN ด้วยถึงจะเรียก LoadConfig ได้
-	// database.LoadConfig()
+	//=>Load db config.
+	database.LoadConfig()
 }
 
 func main() {
-	// db := database.Database{}
-	// db.Log = *log
-	// dbConn := db.GetConnectionDB()
+	db := database.Database{}
+	db.Log = *log
+	dbConn := db.GetConnectionDB()
 
+	//=>new echo context
 	e := echo.New()
+
+	//=>set middleware
 	e.Use(middleware.CORS())
 	e.Use(middleware.Recover())
-	e.Use(middleware.BodyLimit("150M"))
+	e.Use(middleware.BodyLimit("1M"))
 
-	//=>หามี Path สำหรับแสดง Statics Files ให้เปิดใช้งาน
-	// e.Static(config.GetString("service.endpoint")+"/static", "cpm/static")
-
-	//=>First Route
-	eg := e.Group(config.GetString("service.endpoint"))
-	eg.GET("", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World")
-	})
-
-	helloWorldRepository := _helloWorldRepository.NewHelloWorldRepository(nil)
+	//=>domain data-access & business logic
+	helloWorldRepository := _helloWorldRepository.NewHelloWorldRepository(dbConn)
 	helloWorldUseCase := _helloWorldUseCase.NewHelloWorldUseCase(helloWorldRepository, log)
 
+	//=>domain delivery
 	_helloWorldDelivery.NewHelloWorldDelivery(e, helloWorldUseCase, log)
 
+	//=>launch server & port
 	e.Server.Addr = ":" + config.GetString("service.port")
 	if err := graceful.ListenAndServe(e.Server, 5*time.Second); err != nil {
 		panic(err)
 	}
-
 }
