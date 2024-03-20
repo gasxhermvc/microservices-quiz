@@ -10,9 +10,9 @@ import (
 	"os"
 	_ "time/tzdata"
 
-	_helloWorldDelivery "cpn-quiz-api-file-manage-go/hello-world/delivery"
-	_helloWorldRepository "cpn-quiz-api-file-manage-go/hello-world/repository"
-	_helloWorldUseCase "cpn-quiz-api-file-manage-go/hello-world/usecase"
+	_appFileDelivery "cpn-quiz-api-file-manage-go/app-file/delivery"
+	_appFileRepository "cpn-quiz-api-file-manage-go/app-file/repository"
+	_appFileUseCase "cpn-quiz-api-file-manage-go/app-file/usecase"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -60,11 +60,11 @@ func main() {
 	e.Use(middleware.BodyLimit("1M"))
 
 	//=>domain data-access & business logic
-	helloWorldRepository := _helloWorldRepository.NewHelloWorldRepository(dbConn)
-	helloWorldUseCase := _helloWorldUseCase.NewHelloWorldUseCase(helloWorldRepository, log)
+	appFileRepository := _appFileRepository.NewAppFileRepository(dbConn)
+	appFileUseCase := _appFileUseCase.NewAppFileUseCase(appFileRepository, log)
 
 	//=>domain delivery
-	_helloWorldDelivery.NewHelloWorldDelivery(e, helloWorldUseCase, log)
+	_appFileDelivery.NewAppFileDelivery(e, appFileUseCase, log)
 
 	//=>launch server & port
 	e.Server.Addr = ":" + config.GetString("service.port")

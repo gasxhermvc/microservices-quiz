@@ -3,10 +3,10 @@ build:
   number: 0
 
 service:
-  name: cpn-quiz-api-file-manage-go
+  name: cpn-quiz-api-file-manage
   port: 80
   domain: localhost
-  endpoint: /cpn-quiz-api-file-manage-go
+  endpoint: /cpn-quiz-api-file-manage
 
 kibana:
-  suffix: cpn-quiz-api-file-manage-go
+  suffix: cpn-quiz-api-file-manage
