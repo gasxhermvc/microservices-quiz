@@ -16,7 +16,7 @@ import (
 )
 
 func getKey(token *jwt.Token) (interface{}, error) {
-	endpoint := config.GetString("cpm.quiz.sso.endpoint")
+	endpoint := config.GetString("cpn.quiz.sso.endpoint")
 	keySet, err := jwk.Fetch(context.Background(), endpoint+"/realms/cpn-quiz/protocol/openid-connect/certs")
 	if err != nil {
 		return nil, err

@@ -5,7 +5,7 @@ package domain
 type HelloWorldUseCase interface {
 	// CronJob() error
 
-	// //=>CPM Interface logs
+	// //=>cpn Interface logs
 	// InsertLogDetail(int, string) error
 	// InsertLog() (int, error)
 	// UpdateLog(int, int, int, int, int) error

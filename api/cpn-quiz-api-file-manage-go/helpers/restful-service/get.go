@@ -24,7 +24,7 @@ func (r *Restful) HttpGet(endpoint string, request url.Values) ([]byte, int, err
 		return nil, 400, err
 	}
 
-	var apiKey = config.GetString("cpm.pea.hr.platform.apikey")
+	var apiKey = config.GetString("cpn.pea.hr.platform.apikey")
 	if len(apiKey) == 0 {
 		apiKey = "kbSx0UbaCB72hf9UV659k4nKCL1CIyDa"
 	}
@@ -52,7 +52,7 @@ func (r *Restful) HttpGet(endpoint string, request url.Values) ([]byte, int, err
 	return bodyText, statusCode, nil
 }
 
-//Decode ...
+// Decode ...
 func (r *Restful) Decode(data []byte, contents interface{}) error {
 	err := json.Unmarshal(data, contents)
 	if err != nil {

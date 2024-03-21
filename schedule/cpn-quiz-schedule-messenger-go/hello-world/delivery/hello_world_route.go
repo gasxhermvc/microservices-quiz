@@ -25,7 +25,7 @@ func NewHelloWorldDelivery(e *echo.Echo, helloWorldUsecase domain.HelloWorldUseC
 	// eg := e.Group(config.GetString("service.endpoint"))
 	// eConfig := middleware.JWTConfig{
 	// 	Claims:     &domain.Token{},
-	// 	SigningKey: []byte(config.GetString("cpm.api.jwt.token.sign")),
+	// 	SigningKey: []byte(config.GetString("cpn.api.jwt.token.sign")),
 	// }
 	// eg.Use(middleware.JWTWithConfig(eConfig))
 	// eg.GET("/triggerHelloWorld", handler.TriggerJob)

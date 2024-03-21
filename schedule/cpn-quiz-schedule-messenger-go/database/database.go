@@ -27,7 +27,7 @@ func (d Database) GetConnectionDB() *gorm.DB {
 
 func (d Database) initConnect() *gorm.DB {
 	var err error
-	dsn := config.GetString("cpm.sqlserver.connection.string")
+	dsn := config.GetString("cpn.quiz.postgresql.connection.string")
 	//=>Re-connection to database.
 	d.DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
 		PrepareStmt: true,
@@ -43,7 +43,7 @@ func (d Database) initConnect() *gorm.DB {
 
 func LoadConfig() {
 	//=>Get connection string from config
-	dsn := config.GetString("cpm.sqlserver.connection.string")
+	dsn := config.GetString("cpn.quiz.postgresql.connection.string")
 
 	//=>Open connection to database for get application config from table.
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{

@@ -54,7 +54,7 @@ func (r *Restful) HttpGetSummaryUnLog(endpoint string, body *bytes.Buffer) ([]by
 		return nil, 400, err
 	}
 
-	/* var apiKey = config.GetString("cpm.pea.hr.platform.apikey")
+	/* var apiKey = config.GetString("cpn.pea.hr.platform.apikey")
 	if len(apiKey) == 0 {
 		apiKey = "kbSx0UbaCB72hf9UV659k4nKCL1CIyDa"
 	}

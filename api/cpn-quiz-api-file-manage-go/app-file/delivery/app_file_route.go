@@ -4,6 +4,8 @@ import (
 	"cpn-quiz-api-file-manage-go/domain"
 	"cpn-quiz-api-file-manage-go/logger"
 
+	"github.com/golang-jwt/jwt/v5"
+	echojwt "github.com/labstack/echo-jwt"
 	"github.com/labstack/echo/v4"
 	config "github.com/spf13/viper"
 )
@@ -21,7 +23,13 @@ func NewAppFileDelivery(e *echo.Echo, appFileUseCase domain.AppFileUseCase, log 
 	}
 
 	eg := e.Group(config.GetString("service.endpoint"))
-
+	eConfig := echojwt.Config{
+		NewClaimsFunc: func(c echo.Context) jwt.Claims {
+			return new(domain.Token)
+		},
+		SigningKey: []byte(config.GetString("dcc.api.jwt.token.sign")),
+	}
+	eg.Use(echojwt.WithConfig(eConfig))
 	eg.POST("/upload", handler.UploadFile)
 	eg.DELETE("/remove", handler.RemoveFile)
 	eg.GET("/download", handler.DownloadFile)

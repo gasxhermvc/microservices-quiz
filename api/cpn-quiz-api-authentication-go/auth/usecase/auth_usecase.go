@@ -59,7 +59,7 @@ func (auth *authUseCase) GenerateToken(payload jwt.MapClaims) domain.UseCaseResu
 
 	//=>Generate token by secretkey in db config.
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	accessToken, err := token.SignedString([]byte(config.GetString("cpm.quiz.api.jwt.secretkey")))
+	accessToken, err := token.SignedString([]byte(config.GetString("cpn.quiz.api.jwt.secretkey")))
 
 	if err != nil {
 		//=>Generate error.

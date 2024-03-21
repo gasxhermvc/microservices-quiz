@@ -59,7 +59,7 @@ func NewHelloWorldUseCase(helloWorldRepository domain.HelloWorldRespository, log
 
 // func (hello helloWorldUseCase) callSummarizeNotification(result domain.UpdateResult) {
 // 	p := message.NewPrinter(language.English)
-// 	lineToken := config.GetString("cpm.api.notification.line.token")
+// 	lineToken := config.GetString("cpn.api.notification.line.token")
 // 	lineNotification := notification.NewLineNotify(lineToken)
 // 	params := make(map[string]interface{})
 // 	msgDetail := fmt.Sprintf(`
@@ -76,7 +76,7 @@ func NewHelloWorldUseCase(helloWorldRepository domain.HelloWorldRespository, log
 // }
 
 // func (hello helloWorldUseCase) callErroNotification(errMsg string) {
-// 	lineToken := config.GetString("cpm.api.notification.line.token")
+// 	lineToken := config.GetString("cpn.api.notification.line.token")
 // 	lineNotification := notification.NewLineNotify(lineToken)
 // 	params := make(map[string]interface{})
 // 	msgDetail := fmt.Sprintf(`
@@ -107,7 +107,7 @@ func NewHelloWorldUseCase(helloWorldRepository domain.HelloWorldRespository, log
 // func (hello helloWorldUseCase) InsertLog() (int, error) {
 // 	params := make(map[string]interface{})
 
-// 	params["PROGRAM_ID"] = config.GetInt("cpm.application.programId")
+// 	params["PROGRAM_ID"] = config.GetInt("cpn.application.programId")
 // 	params["RUN_DATE"] = hello.runDate
 // 	if len(hello.username) != 0 {
 // 		params["USERNAME"] = hello.username

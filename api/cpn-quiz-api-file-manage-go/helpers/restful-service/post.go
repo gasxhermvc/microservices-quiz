@@ -25,7 +25,7 @@ func (r *Restful) HttpPost(endpoint string, request url.Values) ([]byte, int, er
 		return nil, 400, err
 	}
 
-	var apiKey = config.GetString("cpm.hr.platform.apikey")
+	var apiKey = config.GetString("cpn.hr.platform.apikey")
 	req.Header.Add("apiKey", apiKey)
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Add("Content-Length", strconv.Itoa(len(request.Encode())))
