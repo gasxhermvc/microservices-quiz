@@ -27,7 +27,7 @@ func NewAppFileDelivery(e *echo.Echo, appFileUseCase domain.AppFileUseCase, log 
 		NewClaimsFunc: func(c echo.Context) jwt.Claims {
 			return new(domain.Token)
 		},
-		SigningKey: []byte(config.GetString("dcc.api.jwt.token.sign")),
+		SigningKey: []byte(config.GetString("cpn.quiz.api.jwt.secretkey")),
 	}
 	eg.Use(echojwt.WithConfig(eConfig))
 	eg.POST("/upload", handler.UploadFile)
