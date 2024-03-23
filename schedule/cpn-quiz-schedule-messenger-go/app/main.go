@@ -35,7 +35,12 @@ func init() {
 	}
 
 	//=>Load env.yml
-	config.SetConfigFile((".env.yml"))
+	if env != "local" {
+		config.SetConfigFile(fmt.Sprintf(".env.%s.yml", env))
+	} else {
+		config.SetConfigFile((".env.yml"))
+	}
+
 	if err := config.MergeInConfig(); err != nil {
 		panic(err)
 	}

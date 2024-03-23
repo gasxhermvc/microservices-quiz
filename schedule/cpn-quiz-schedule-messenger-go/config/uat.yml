@@ -1,0 +1,12 @@
+build:
+  date: 2024/03/17
+  author: gasxhermvc
+
+service:
+  name: cpn-quiz-schedule-messenger
+  port: 80
+  domain: localhost
+  endpoint: /cpn-quiz-schedule-messenger
+
+kibana:
+  suffix: cpn-quiz-schedule-messenger

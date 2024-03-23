@@ -10,7 +10,7 @@
             "name": "Launch Chrome against localhost",
             "program": "${workspaceFolder}/app/main.go",
             "args": [
-                "dev",
+                "local",
                 "de"
             ],
             "cwd": "${workspaceFolder}"

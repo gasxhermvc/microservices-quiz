@@ -1,10 +1,10 @@
 build:
-  date: 2023/03/17
-  number: 0
+  date: 2024/03/17
+  author: gasxhermvc
 
 service:
   name: cpn-quiz-api-file-manage
-  port: 8001
+  port: 80
   domain: localhost
   endpoint: /cpn-quiz-api-file-manage
 

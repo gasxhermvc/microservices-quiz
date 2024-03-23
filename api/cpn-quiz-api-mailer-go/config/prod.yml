@@ -1,12 +1,12 @@
 build:
-  date: 2022/04/07
+  date: 2023/03/17
   number: 0
 
 service:
-  name: cpn-quiz-api-mailer-go
+  name: cpn-quiz-api-api-mailer
   port: 80
   domain: localhost
-  endpoint: /cpn-quiz-api-mailer-go
+  endpoint: /cpn-quiz-api-api-mailer
 
 kibana:
-  suffix: cpn-quiz-api-mailer-go
+  suffix: cpn-quiz-api-api-mailer

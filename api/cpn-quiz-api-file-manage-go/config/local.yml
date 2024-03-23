@@ -1,0 +1,12 @@
+build:
+  date: 2024/03/17
+  author: gasxhermvc
+
+service:
+  name: cpn-quiz-api-file-manage
+  port: 8002
+  domain: localhost
+  endpoint: /cpn-quiz-api-file-manage
+
+kibana:
+  suffix: cpn-quiz-api-file-manage

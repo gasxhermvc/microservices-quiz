@@ -1,11 +1,12 @@
 build:
-  date: 2021/09/01
-  number: 0
+  date: 2024/03/17
+  author: gasxhermvc
 
 service:
-  name: schedule-project-template
+  name: cpn-quiz-schedule-messenger
   port: 80
   domain: localhost
+  endpoint: /cpn-quiz-schedule-messenger
 
 kibana:
-  suffix: schedule-project-template
+  suffix: cpn-quiz-schedule-messenger

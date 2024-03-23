@@ -1,0 +1,12 @@
+build:
+  date: 2023/03/17
+  number: 0
+
+service:
+  name: cpn-quiz-api-api-mailer
+  port: 80
+  domain: localhost
+  endpoint: /cpn-quiz-api-api-mailer
+
+kibana:
+  suffix: cpn-quiz-api-api-mailer

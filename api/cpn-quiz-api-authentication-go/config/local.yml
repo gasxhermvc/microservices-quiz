@@ -1,0 +1,12 @@
+build:
+  date: 2024/03/17
+  author: gasxhermvc
+
+service:
+  name: cpn-quiz-api-authentication
+  port: 8001
+  domain: localhost
+  endpoint: /cpn-quiz-api-authentication
+
+kibana:
+  suffix: cpn-quiz-api-authentication
