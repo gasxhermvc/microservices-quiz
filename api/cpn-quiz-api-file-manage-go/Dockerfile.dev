@@ -21,6 +21,7 @@ FROM scratch
 COPY --from=builder /app/main .
 COPY --from=builder /app/config ./config/
 COPY --from=builder /app/.env.dev.yml ./.env.yml
+COPY --from=builder /app/storage ./storage
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
 ENV TZ=Asia/Bangkok
