@@ -27,6 +27,6 @@ type Token struct {
 	jwt.RegisteredClaims
 	Sub string `json:"sub"`
 	Aud string `json:"aud"`
-	Iat int    `json:"iat"`
+	Iat int64  `json:"iat"`
 	Iss string `json:"iss"`
 }
