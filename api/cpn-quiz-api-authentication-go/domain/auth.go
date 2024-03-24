@@ -16,7 +16,6 @@ type UserInfo struct {
 	Email             string `json:"email"`
 	GivenName         string `json:"given_name"`
 	FamilyName        string `json:"family_name"`
-	Sub               string `json:"sub"`
 }
 
 type Token struct {
@@ -24,4 +23,5 @@ type Token struct {
 	UserInfo   *UserInfo   `json:"userInfo"`
 	Permission interface{} `json:"permission"`
 	jwt.RegisteredClaims
+	Sub string `json:"sub"`
 }

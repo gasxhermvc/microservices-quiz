@@ -41,7 +41,6 @@ func (auth *authUseCase) GenerateToken(payload jwt.MapClaims) domain.UseCaseResu
 		Email:             payload["email"].(string),
 		GivenName:         payload["given_name"].(string),
 		FamilyName:        payload["family_name"].(string),
-		Sub:               payload["sub"].(string),
 	}
 
 	//=>Create expired time.
@@ -55,6 +54,7 @@ func (auth *authUseCase) GenerateToken(payload jwt.MapClaims) domain.UseCaseResu
 		UserInfo:         &userInfo,
 		Permission:       payload["realm_access"],
 		RegisteredClaims: jwt.RegisteredClaims{ExpiresAt: &expireAt},
+		Sub:              payload["sub"].(string),
 	}
 
 	//=>Generate token by secretkey in db config.

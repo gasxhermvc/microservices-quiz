@@ -29,11 +29,6 @@ func NewAuthDelivery(e *echo.Echo, authUsecase domain.AuthUseCase, log *logger.P
 	g := r.Group("/auth")
 	eConfig := echojwt.Config{
 		KeyFunc: getKey,
-		Skipper: func(c echo.Context) bool {
-			clientId := c.Request().Header.Get("x-client-id")
-			authorization := c.Request().Header.Get("x-api-key")
-			return clientId != "" && authorization != ""
-		},
 	}
 
 	g.Use(echojwt.WithConfig(eConfig))
