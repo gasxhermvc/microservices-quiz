@@ -7,10 +7,12 @@ type Response struct {
 	Message       string      `json:"msg"`
 	Code          string      `json:"code"`
 	ResponseData  interface{} `json:"responseData,omitempty"`
+	StatusCode    int         `json:"-"`
+	ErrorResponse
 }
 
 type ErrorResponse struct {
-	Error []string `json:"errorMessage"`
+	Error []string `json:"errors,omitempty"`
 }
 
 type Token struct {
@@ -32,24 +34,9 @@ type UserInfo struct {
 //=>App struct.
 type UseCaseResult struct {
 	Result     interface{}
-	Error      error
+	Errors     []string
 	Success    bool
 	Message    string
-	StatusCode int
-}
-
-type FileServerConfig struct {
-	FileSourceParameter string                `json:"file_source_parameter"`
-	FilePathParameter   string                `json:"file_path_parameter"`
-	FileIdParameter     string                `json:"file_id_parameter"`
-	FileListParameter   string                `json:"file_list_parameter"`
-	DefaultFileSource   string                `json:"default_file_source"`
-	Filesource          map[string]Filesource `json:"filesource"`
-}
-
-type Filesource struct {
-	Domain     string `json:"domain"`
-	RemotePath string `json:"remote_path"`
-	Username   string `json:"username"`
-	Password   string `json:"password"`
+	StatusCode string
+	Tx         string
 }

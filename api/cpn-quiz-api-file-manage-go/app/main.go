@@ -57,7 +57,7 @@ func main() {
 	//=>set middleware
 	e.Use(middleware.CORS())
 	e.Use(middleware.Recover())
-	e.Use(middleware.BodyLimit("1M"))
+	e.Use(middleware.BodyLimit("50M"))
 
 	//=>domain data-access & business logic
 	appFileRepository := _appFileRepository.NewAppFileRepository(dbConn)

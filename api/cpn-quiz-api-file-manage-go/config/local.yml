@@ -4,9 +4,45 @@ build:
 
 service:
   name: cpn-quiz-api-file-manage
-  port: 8002
+  port: 8012
   domain: localhost
   endpoint: /cpn-quiz-api-file-manage
 
 kibana:
   suffix: cpn-quiz-api-file-manage
+
+cpn:
+  quiz:
+    format:
+      shortdate: "2006-01-02"
+      longdate: "2006-01-02 15:04:05"
+    fileserver:
+      parameter:
+        source: "app_file_source"
+        path: "app_file_path"
+        id: "app_file_id"
+        list: "app_file_list"
+        default: "default"
+      filesource:
+        default:
+          path: "./storage"
+          domain: ""
+          username: ""
+          password: ""
+        email:
+          path: "./storage/attachments/email"
+          domain: ""
+          username: ""
+          password: ""
+      permission:
+        file:
+          public: 0644
+          private: 0600
+        dir:
+          public: 0755
+          private: 0700
+    upload:
+      limit:
+        file: 5
+        perfile: 5242880
+        perrequest: 20971520

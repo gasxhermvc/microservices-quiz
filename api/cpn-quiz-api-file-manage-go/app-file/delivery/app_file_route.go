@@ -30,8 +30,16 @@ func NewAppFileDelivery(e *echo.Echo, appFileUseCase domain.AppFileUseCase, log 
 		SigningKey: []byte(config.GetString("cpn.quiz.api.jwt.secretkey")),
 	}
 	eg.Use(echojwt.WithConfig(eConfig))
+
+	//=>Dynamic upload file
 	eg.POST("/upload", handler.UploadFile)
+
+	//=>Dynamic Remove path within config remote path
 	eg.DELETE("/remove", handler.RemoveFile)
+
+	//=>Download file
 	eg.GET("/download", handler.DownloadFile)
+
+	//=>Preview file
 	eg.GET("/preview", handler.PreviewFile)
 }
