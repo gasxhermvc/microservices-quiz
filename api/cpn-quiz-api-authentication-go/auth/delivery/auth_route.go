@@ -4,6 +4,8 @@ import (
 	"cpn-quiz-api-authentication-go/domain"
 	"cpn-quiz-api-authentication-go/logger"
 
+	_permissionMiddleware "cpn-quiz-api-authentication-go/middleware/permission-middleware"
+
 	echojwt "github.com/labstack/echo-jwt/v4"
 
 	"github.com/labstack/echo/v4"
@@ -27,8 +29,16 @@ func NewAuthDelivery(e *echo.Echo, authUsecase domain.AuthUseCase, log *logger.P
 	g := r.Group("/auth")
 	eConfig := echojwt.Config{
 		KeyFunc: getKey,
+		Skipper: func(c echo.Context) bool {
+			clientId := c.Request().Header.Get("x-client-id")
+			authorization := c.Request().Header.Get("x-api-key")
+			return clientId != "" && authorization != ""
+		},
 	}
 
 	g.Use(echojwt.WithConfig(eConfig))
+	_perm := _permissionMiddleware.NewPermissionMiddleware(log)
+	g.Use(_perm.AuthorizePermissions("cpn-quiz-api-authentication-create"))
+
 	g.POST("/token", handler.AuthToken)
 }

@@ -22,7 +22,6 @@ type UserInfo struct {
 type Token struct {
 	Username   string      `json:"username"`
 	UserInfo   *UserInfo   `json:"userInfo"`
-	IsEmployee bool        `json:"isEmployee"`
 	Permission interface{} `json:"permission"`
 	jwt.RegisteredClaims
 }

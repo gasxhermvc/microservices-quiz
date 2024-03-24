@@ -6,13 +6,13 @@ import (
 	"cpn-quiz-api-authentication-go/logger"
 	"time"
 
-	"fmt"
-	"os"
-	_ "time/tzdata"
-
 	_authDelivery "cpn-quiz-api-authentication-go/auth/delivery"
 	_authRepository "cpn-quiz-api-authentication-go/auth/repository"
 	_authUseCase "cpn-quiz-api-authentication-go/auth/usecase"
+	auth "cpn-quiz-api-authentication-go/middleware/service-authorize"
+	"fmt"
+	"os"
+	_ "time/tzdata"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -43,6 +43,7 @@ func init() {
 
 	//=>Load db config.
 	database.LoadConfig()
+	auth.LoadApiKeyLists() //Load APIKEY
 }
 
 func main() {
