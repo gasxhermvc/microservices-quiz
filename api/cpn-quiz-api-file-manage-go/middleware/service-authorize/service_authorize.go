@@ -125,17 +125,19 @@ func (cag *CustomAuthorizeGuard) AuthorizeGuard() echo.MiddlewareFunc {
 					})
 				}
 
-				//=>Next or Error
-				if err := next(c); err != nil {
-					msg = err.Error()
-					cag.Log.Error(transId, msg)
-					return c.JSON(http.StatusUnauthorized, domain.Response{
-						TransactionId: transId,
-						Message:       msg,
-						Code:          constant.UnAuthorizationCode,
-					})
-				}
 			}
+
+			//=>Next or Error
+			if err := next(c); err != nil {
+				msg = err.Error()
+				cag.Log.Error(transId, msg)
+				return c.JSON(http.StatusUnauthorized, domain.Response{
+					TransactionId: transId,
+					Message:       msg,
+					Code:          constant.UnAuthorizationCode,
+				})
+			}
+
 			return nil
 		}
 	}
