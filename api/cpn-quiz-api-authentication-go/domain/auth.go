@@ -26,7 +26,8 @@ type Token struct {
 	Permission interface{} `json:"permission"`
 	jwt.RegisteredClaims
 	Sub string `json:"sub"`
-	Aud string `json:"aud"`
 	Iat int64  `json:"iat"`
+	Exp int64  `json:"exp"`
+	Aud string `json:"aud"`
 	Iss string `json:"iss"`
 }

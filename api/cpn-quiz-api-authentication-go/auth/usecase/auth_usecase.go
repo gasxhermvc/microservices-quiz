@@ -43,6 +43,17 @@ func (auth *authUseCase) GenerateToken(payload jwt.MapClaims) domain.UseCaseResu
 		FamilyName:        payload["family_name"].(string),
 	}
 
+	//=>audience
+	audience := jwt.ClaimStrings{
+		payload["aud"].(string),
+		"cpn-quiz",
+	}
+
+	//=>issue at time.
+	issuedAt := jwt.NumericDate{
+		Time: time.Now().AddDate(0, 0, 0),
+	}
+
 	//=>Create expired time.
 	expireAt := jwt.NumericDate{
 		Time: time.Now().AddDate(0, 0, 0).Add(tokenExpireDuration),
@@ -50,14 +61,18 @@ func (auth *authUseCase) GenerateToken(payload jwt.MapClaims) domain.UseCaseResu
 
 	//=>Create claim.
 	claims := &domain.Token{
-		Username:         payload["preferred_username"].(string),
-		UserInfo:         &userInfo,
-		Permission:       payload["realm_access"],
-		RegisteredClaims: jwt.RegisteredClaims{ExpiresAt: &expireAt},
-		Sub:              payload["sub"].(string),
-		Aud:              "cpn-quiz",
-		Iat:              time.Now().Unix(),
-		Iss:              payload["iss"].(string),
+		Username:   payload["preferred_username"].(string),
+		UserInfo:   &userInfo,
+		Permission: payload["realm_access"],
+		RegisteredClaims: jwt.RegisteredClaims{
+			Subject:   payload["sub"].(string),
+			IssuedAt:  &issuedAt,
+			Issuer:    payload["iss"].(string),
+			Audience:  audience,
+			ExpiresAt: &expireAt,
+		},
+		Sub: payload["sub"].(string),
+		Iat: time.Now().Unix(),
 	}
 
 	//=>Generate token by secretkey in db config.
