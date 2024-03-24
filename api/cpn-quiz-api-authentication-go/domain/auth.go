@@ -1,16 +1,20 @@
 package domain
 
-import "github.com/golang-jwt/jwt/v5"
+import (
+	"time"
 
-//=>Repo interfaces.
+	"github.com/golang-jwt/jwt/v5"
+)
+
+// =>Repo interfaces.
 type AuthRepository interface{}
 
-//=>UseCase interfaces.
+// =>UseCase interfaces.
 type AuthUseCase interface {
 	GenerateToken(payload jwt.MapClaims) (response UseCaseResult)
 }
 
-//=>App struct.
+// =>App struct.
 type UserInfo struct {
 	PreferredUsername string `json:"preferred_username"`
 	Email             string `json:"email"`
@@ -23,5 +27,8 @@ type Token struct {
 	UserInfo   *UserInfo   `json:"userInfo"`
 	Permission interface{} `json:"permission"`
 	jwt.RegisteredClaims
-	Sub string `json:"sub"`
+	Sub string    `json:"sub"`
+	Aud string    `json:"aud"`
+	Iat time.Time `json:"iat"`
+	Iss string    `json:"iss"`
 }

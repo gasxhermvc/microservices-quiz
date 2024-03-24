@@ -55,6 +55,9 @@ func (auth *authUseCase) GenerateToken(payload jwt.MapClaims) domain.UseCaseResu
 		Permission:       payload["realm_access"],
 		RegisteredClaims: jwt.RegisteredClaims{ExpiresAt: &expireAt},
 		Sub:              payload["sub"].(string),
+		Aud:              "cpn-quiz",
+		Iat:              time.Now(),
+		Iss:              payload["iss"].(string),
 	}
 
 	//=>Generate token by secretkey in db config.

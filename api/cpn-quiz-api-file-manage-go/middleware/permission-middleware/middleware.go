@@ -30,10 +30,10 @@ func (perm *PermissionMiddleware) AuthorizePermissions(matches ...string) echo.M
 			token, found := c.Get("user").(*jwt.Token)
 			if found {
 				claims := token.Claims.(jwt.MapClaims)
-				permissions, found := claims["realm_access"].(map[string]interface{})
-				if !found {
-					permissions = claims["permission"].(map[string]interface{})
-				}
+				permissions := claims["permission"].(map[string]interface{})
+				// if !found {
+				// 	permissions = claims["permission"].(map[string]interface{})
+				// }
 				roles := permissions["roles"].([]interface{})
 
 				var convertRoles []string
