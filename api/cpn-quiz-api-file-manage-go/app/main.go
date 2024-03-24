@@ -13,12 +13,12 @@ import (
 	_appFileDelivery "cpn-quiz-api-file-manage-go/app-file/delivery"
 	_appFileRepository "cpn-quiz-api-file-manage-go/app-file/repository"
 	_appFileUseCase "cpn-quiz-api-file-manage-go/app-file/usecase"
+	_auth "cpn-quiz-api-file-manage-go/middleware/service-authorize"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	config "github.com/spf13/viper"
 	"github.com/tylerb/graceful"
-	// _appDataService "cpn-quiz-api-file-manage-go/helpers/app-data-service"
 )
 
 var log = new(logger.PatternLogger).InitLogger("ALL", config.GetString("service.name"), logger.Service, logger.Database)
@@ -44,6 +44,7 @@ func init() {
 
 	//=>Load db config.
 	database.LoadConfig()
+	_auth.LoadApiKeyLists()
 }
 
 func main() {

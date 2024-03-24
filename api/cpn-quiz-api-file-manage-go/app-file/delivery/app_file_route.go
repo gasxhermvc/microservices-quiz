@@ -5,6 +5,7 @@ import (
 	"cpn-quiz-api-file-manage-go/logger"
 
 	_perm "cpn-quiz-api-file-manage-go/middleware/permission-middleware"
+	_auth "cpn-quiz-api-file-manage-go/middleware/service-authorize"
 
 	"github.com/golang-jwt/jwt/v5"
 	echojwt "github.com/labstack/echo-jwt/v4"
@@ -38,20 +39,36 @@ func NewAppFileDelivery(e *echo.Echo, appFileUseCase domain.AppFileUseCase, log 
 	}
 	eg.Use(echojwt.WithConfig(eConfig))
 
+	auth := _auth.NewCustomAuthorizeGuardOnly("cpn-file-manage", log)
 	perm := _perm.NewPermissionMiddleware(log)
-	eg.Use(perm.AuthorizePermissions("cpn-quiz-api-file-manage-create"))
+	//=>For check permissions
+	matches := []_perm.MatchRoute{
+		_perm.MatchRoute{
+			Route:    "/upload",
+			Resource: "cpn-quiz-api-file-manage-create",
+		},
+		_perm.MatchRoute{
+			Route:    "/remove",
+			Resource: "cpn-quiz-api-file-manage-delete",
+		},
+		_perm.MatchRoute{
+			Route:    "/download",
+			Resource: "cpn-quiz-api-file-manage-query",
+		},
+		_perm.MatchRoute{
+			Route:    "/preview",
+			Resource: "cpn-quiz-api-file-manage-query",
+		},
+	}
+
+	eg.Use(perm.AuthorizePermissions(matches))
+	eg.Use(auth.AuthorizeGuard())
 	//=>Dynamic upload file
 	eg.POST("/upload", handler.UploadFile)
-
-	eg.Use(perm.AuthorizePermissions("cpn-quiz-api-file-manage-delete"))
 	//=>Dynamic Remove path within config remote path
 	eg.DELETE("/remove", handler.RemoveFile)
-
-	eg.Use(perm.AuthorizePermissions("cpn-quiz-api-file-manage-query"))
 	//=>Download file
 	eg.GET("/download", handler.DownloadFile)
-
-	eg.Use(perm.AuthorizePermissions("cpn-quiz-api-file-manage-query"))
 	//=>Preview file
 	eg.GET("/preview", handler.PreviewFile)
 }

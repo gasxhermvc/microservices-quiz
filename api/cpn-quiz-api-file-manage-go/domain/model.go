@@ -16,10 +16,9 @@ type ErrorResponse struct {
 }
 
 type Token struct {
-	Username   string    `json:"username"`
-	UserInfo   *UserInfo `json:"userInfo"`
-	IsEmployee bool      `json:"isEmployee"`
-	IsCapital  bool      `json:"isCapital"` // reserved for กองโค
+	Username   string      `json:"username"`
+	UserInfo   *UserInfo   `json:"userInfo"`
+	Permission Permissions `json:"permission"`
 	jwt.RegisteredClaims
 }
 
@@ -29,6 +28,10 @@ type UserInfo struct {
 	GivenName         string `json:"given_name"`
 	FamilyName        string `json:"family_name"`
 	Sub               string `json:"sub"`
+}
+
+type Permissions struct {
+	Roles []string `json:"roles"`
 }
 
 //=>App struct.

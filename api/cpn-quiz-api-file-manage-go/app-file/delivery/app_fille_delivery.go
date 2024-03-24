@@ -16,6 +16,7 @@ import (
 func (appFile appFileDelivery) UploadFile(c echo.Context) error {
 	//=>สร้าง uuid สำหรับ Tracking request ใน Logs
 	appFile.transId = uuid.New().String()
+	appFile.log.Info(appFile.transId, "Start :: UploadFile")
 
 	//=>สร้างและเตรียม Struct สำหรับ Response
 	response := domain.Response{}
@@ -38,7 +39,11 @@ func (appFile appFileDelivery) UploadFile(c echo.Context) error {
 		response.Message = constant.InternalServerError
 		response.Code = constant.InternalServerErrorCode
 		limit := config.GetInt32("cpn.quiz.upload.limit.file")
-		response.Error = append(response.Error, fmt.Sprintf("Please upload no more than %d files.", limit))
+
+		err := fmt.Sprintf("Please upload no more than %d files.", limit)
+		response.Error = append(response.Error, err)
+		appFile.log.Error(appFile.transId, "UploadFile.Error.isExceedLimitUpload: "+err)
+		appFile.log.Info(appFile.transId, "End :: UploadFile")
 		return c.JSON(http.StatusInternalServerError, response)
 	}
 
@@ -48,7 +53,11 @@ func (appFile appFileDelivery) UploadFile(c echo.Context) error {
 		response.Code = constant.InternalServerErrorCode
 		limitSizePerRequest := config.GetInt64("cpn.quiz.upload.limit.perrequest")
 		convertSize := limitSizePerRequest / 1024 / 1024
-		response.Error = append(response.Error, fmt.Sprintf("Upload all files totaling no more than %d MB.", convertSize))
+
+		err := fmt.Sprintf("Upload all files totaling no more than %d MB.", convertSize)
+		response.Error = append(response.Error, err)
+		appFile.log.Error(appFile.transId, "UploadFile.Error.isExceedPerRequest: "+err)
+		appFile.log.Info(appFile.transId, "End :: UploadFile")
 		return c.JSON(http.StatusInternalServerError, response)
 	}
 
@@ -58,7 +67,11 @@ func (appFile appFileDelivery) UploadFile(c echo.Context) error {
 		response.Code = constant.InternalServerErrorCode
 		limitSizePerFile := config.GetInt64("cpn.quiz.upload.limit.perfile")
 		convertSize := limitSizePerFile / 1024 / 1024
-		response.Error = append(response.Error, fmt.Sprintf("Please upload a file no larger than %d MB per file.", convertSize))
+
+		err := fmt.Sprintf("Please upload a file no larger than %d MB per file.", convertSize)
+		response.Error = append(response.Error, err)
+		appFile.log.Error(appFile.transId, "UploadFile.Error.isExceedPerFile: "+err)
+		appFile.log.Info(appFile.transId, "End :: UploadFile")
 		return c.JSON(http.StatusInternalServerError, response)
 	}
 
@@ -66,12 +79,20 @@ func (appFile appFileDelivery) UploadFile(c echo.Context) error {
 	result.Tx = appFile.transId
 	response = _utils.Response(result)
 
+	if result.Errors != nil {
+		for _, err := range result.Errors {
+			appFile.log.Error(appFile.transId, "UploadFile.Usecase.Error: "+err)
+		}
+	}
+
+	appFile.log.Info(appFile.transId, "End :: UploadFile")
 	return c.JSON(response.StatusCode, response)
 }
 
 func (appFile appFileDelivery) RemoveFile(c echo.Context) error {
 	//=>สร้าง uuid สำหรับ Tracking request ใน Logs
 	appFile.transId = uuid.New().String()
+	appFile.log.Info(appFile.transId, "Start :: RemoveFile")
 
 	//=>สร้างและเตรียม Struct สำหรับ Response
 	response := domain.Response{}
@@ -97,9 +118,13 @@ func (appFile appFileDelivery) RemoveFile(c echo.Context) error {
 
 	if !hasFileParameter {
 		//=>พารามิเตอร์ไม่ถูกต้อง
+		err := fmt.Sprintf("parameter '%s' or '%s' is either required.", config.GetString("cpn.quiz.fileserver.parameter.id"), config.GetString("cpn.quiz.fileserver.parameter.list"))
 		response.Message = constant.BadRequest
 		response.Code = constant.BadRequestCode
-		response.Error = append(response.Error, fmt.Sprintf("parameter '%s' or '%s' is either required.", config.GetString("cpn.quiz.fileserver.parameter.id"), config.GetString("cpn.quiz.fileserver.parameter.list")))
+		response.Error = append(response.Error, err)
+
+		appFile.log.Info(appFile.transId, "RemoveFile.Parameter.Error: "+err)
+		appFile.log.Info(appFile.transId, "End :: RemoveFile")
 		return c.JSON(http.StatusBadRequest, response)
 	}
 
@@ -115,12 +140,20 @@ func (appFile appFileDelivery) RemoveFile(c echo.Context) error {
 	result.Tx = appFile.transId
 	response = _utils.Response(result)
 
+	if result.Errors != nil {
+		for _, err := range result.Errors {
+			appFile.log.Error(appFile.transId, "RemoveFile.Usecase.Error: "+err)
+		}
+	}
+
+	appFile.log.Info(appFile.transId, "End :: RemoveFile")
 	return c.JSON(response.StatusCode, _utils.Response(result))
 }
 
 func (appFile appFileDelivery) PreviewFile(c echo.Context) error {
 	//=>สร้าง uuid สำหรับ Tracking request ใน Logs
 	appFile.transId = uuid.New().String()
+	appFile.log.Info(appFile.transId, "Start :: PreviewFile")
 
 	//=>สร้างและเตรียม Struct สำหรับ Response
 	response := domain.Response{}
@@ -134,21 +167,31 @@ func (appFile appFileDelivery) PreviewFile(c echo.Context) error {
 	fileQueryParameter[config.GetString("cpn.quiz.fileserver.parameter.path")] = c.Request().FormValue(config.GetString("cpn.quiz.fileserver.parameter.path"))
 	fileQueryParameter[config.GetString("cpn.quiz.fileserver.parameter.id")] = c.Request().FormValue(config.GetString("cpn.quiz.fileserver.parameter.id"))
 
-	reuslt := appFile.appFileUseCase.PreviewFile(fileQueryParameter)
-	reuslt.Tx = appFile.transId
-	response = _utils.Response(reuslt)
+	result := appFile.appFileUseCase.PreviewFile(fileQueryParameter)
+	result.Tx = appFile.transId
+	response = _utils.Response(result)
+
+	if result.Errors != nil {
+		for _, err := range result.Errors {
+			appFile.log.Error(appFile.transId, "PreviewFile.Usecase.Error: "+err)
+		}
+	}
 
 	if response.StatusCode != 200 {
+		appFile.log.Info(appFile.transId, fmt.Sprintf("RemoveFile.Usecase.Error: %d", response.StatusCode))
+		appFile.log.Info(appFile.transId, "End :: PreviewFile")
 		return c.JSON(response.StatusCode, response)
 	}
 
-	file := reuslt.Result.(_directoryAccessService.FileStream)
+	file := result.Result.(_directoryAccessService.FileStream)
+	appFile.log.Info(appFile.transId, "End :: PreviewFile")
 	return c.Inline(file.FullNameAccess, file.Filename)
 }
 
 func (appFile appFileDelivery) DownloadFile(c echo.Context) error {
 	//=>สร้าง uuid สำหรับ Tracking request ใน Logs
 	appFile.transId = uuid.New().String()
+	appFile.log.Info(appFile.transId, "Start :: DownloadFile")
 
 	//=>สร้างและเตรียม Struct สำหรับ Response
 	response := domain.Response{}
@@ -162,14 +205,23 @@ func (appFile appFileDelivery) DownloadFile(c echo.Context) error {
 	fileQueryParameter[config.GetString("cpn.quiz.fileserver.parameter.path")] = c.Request().FormValue(config.GetString("cpn.quiz.fileserver.parameter.path"))
 	fileQueryParameter[config.GetString("cpn.quiz.fileserver.parameter.id")] = c.Request().FormValue(config.GetString("cpn.quiz.fileserver.parameter.id"))
 
-	reuslt := appFile.appFileUseCase.DownloadFile(fileQueryParameter)
-	reuslt.Tx = appFile.transId
-	response = _utils.Response(reuslt)
+	result := appFile.appFileUseCase.DownloadFile(fileQueryParameter)
+	result.Tx = appFile.transId
+	response = _utils.Response(result)
+
+	if result.Errors != nil {
+		for _, err := range result.Errors {
+			appFile.log.Error(appFile.transId, "DownloadFile.Usecase.Error: "+err)
+		}
+	}
 
 	if response.StatusCode != 200 {
+		appFile.log.Info(appFile.transId, fmt.Sprintf("RemoveFile.Usecase.Error: %d", response.StatusCode))
+		appFile.log.Info(appFile.transId, "End :: DownloadFile")
 		return c.JSON(response.StatusCode, response)
 	}
 
-	file := reuslt.Result.(_directoryAccessService.FileStream)
+	file := result.Result.(_directoryAccessService.FileStream)
+	appFile.log.Info(appFile.transId, "End :: DownloadFile")
 	return c.Attachment(file.FullNameAccess, file.Filename)
 }

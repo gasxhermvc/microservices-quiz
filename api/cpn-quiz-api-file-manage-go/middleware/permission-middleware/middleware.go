@@ -6,6 +6,8 @@ import (
 	"cpn-quiz-api-file-manage-go/logger"
 	"fmt"
 	"net/http"
+	"slices"
+	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
@@ -18,7 +20,7 @@ func NewPermissionMiddleware(log *logger.PatternLogger) *PermissionMiddleware {
 	}
 }
 
-func (perm *PermissionMiddleware) AuthorizePermissions(matches ...string) echo.MiddlewareFunc {
+func (perm *PermissionMiddleware) AuthorizePermissions(matches []MatchRoute) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			perm.Mutex.Lock()
@@ -29,57 +31,40 @@ func (perm *PermissionMiddleware) AuthorizePermissions(matches ...string) echo.M
 
 			token, found := c.Get("user").(*jwt.Token)
 			if found {
+				claims := token.Claims.(*domain.Token)
 
-				x1, _ := token.Claims.GetExpirationTime()
-				fmt.Println(x1)
-				x2, _ := token.Claims.GetIssuedAt()
-				fmt.Println(x2)
+				var convertRoles []string
+				for _, role := range claims.Permission.Roles {
+					convertRoles = append(convertRoles, role)
+				}
 
-				x3, _ := token.Claims.GetAudience()
-				fmt.Println(x3)
+				isMatches := false
+				for _, match := range matches {
+					var route string
 
-				x4, _ := token.Claims.GetIssuer()
-				fmt.Println(x4)
+					paths := strings.Split(c.Path()[1:], "/")
+					if len(paths) > 0 {
+						route = fmt.Sprintf("/%s", strings.Join(paths[1:], "/"))
+					}
 
-				x5, _ := token.Claims.GetSubject()
-				fmt.Println(x5)
+					if strings.HasSuffix(route, match.Route) && slices.Contains(convertRoles, match.Resource) {
+						isMatches = true
+						break
+					}
+				}
 
-				x6, _ := token.Claims.GetNotBefore()
-				fmt.Println(x6)
-				// claims := token.Claims.(jwt.MapClaims)
-				// claims["permissions"]
-
-				// permissions := claims["permission"].(map[string]interface{})
-				// // if !found {
-				// // 	permissions = claims["permission"].(map[string]interface{})
-				// // }
-				// roles := permissions["roles"].([]interface{})
-
-				// var convertRoles []string
-				// for _, role := range roles {
-				// 	convertRoles = append(convertRoles, role.(string))
-				// }
-
-				// isMatches := false
-				// for _, match := range matches {
-				// 	if slices.Contains(convertRoles, match) {
-				// 		isMatches = true
-				// 		break
-				// 	}
-				// }
-
-				// if !isMatches {
-				// 	msg = "Access denied., permission not matches."
-				// 	perm.log.Error(transId, msg)
-				// 	return c.JSON(http.StatusForbidden, domain.Response{
-				// 		TransactionId: transId,
-				// 		Message:       constant.AccessDenied,
-				// 		Code:          constant.AccessDeniedCode,
-				// 		ErrorResponse: domain.ErrorResponse{
-				// 			Error: []string{msg},
-				// 		},
-				// 	})
-				// }
+				if !isMatches {
+					msg = "Access denied., permission not matches."
+					perm.log.Error(transId, msg)
+					return c.JSON(http.StatusForbidden, domain.Response{
+						TransactionId: transId,
+						Message:       constant.AccessDenied,
+						Code:          constant.AccessDeniedCode,
+						ErrorResponse: domain.ErrorResponse{
+							Error: []string{msg},
+						},
+					})
+				}
 			} else {
 				clientId := c.Request().Header.Get("x-client-id")
 				authorization := c.Request().Header.Get("x-api-key")
