@@ -131,6 +131,8 @@ services:
     container_name: cpn-quiz-api-file-manage
     links:
       - cpn-quiz-db
+    volumes:
+      - "./api/cpn-quiz-api-file-manage-go/storage:/app/storage"
     networks:
       - cpn-quiz
 
@@ -214,4 +216,11 @@ volumes:
       type: 'none'
       o: 'bind'
       device: './keycloak/keycloak_data'
+    external: false
+  cpn_quiz_api_file_manage_go:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './api/cpn-quiz-api-file-manage-go/storage'
     external: false
