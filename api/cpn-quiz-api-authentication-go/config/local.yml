@@ -4,7 +4,7 @@ build:
 
 service:
   name: cpn-quiz-api-authentication
-  port: 8001
+  port: 8011
   domain: localhost
   endpoint: /cpn-quiz-api-authentication
 

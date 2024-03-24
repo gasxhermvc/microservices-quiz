@@ -5,17 +5,19 @@ type Response struct {
 	Message       string      `json:"msg"`
 	Code          string      `json:"code"`
 	ResponseData  interface{} `json:"responseData,omitempty"`
+	StatusCode    int         `json:"-"`
+	ErrorResponse
 }
 
 type ErrorResponse struct {
-	Error []string `json:"errorMessage"`
+	Error []string `json:"errors,omitempty"`
 }
 
 type UseCaseResult struct {
 	Result     interface{}
-	Error      error
+	Errors     []string
 	Success    bool
 	Message    string
-	StatusCode int
+	StatusCode string
 	Tx         string
 }

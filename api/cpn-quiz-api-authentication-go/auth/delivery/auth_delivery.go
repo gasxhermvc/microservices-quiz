@@ -1,14 +1,12 @@
 package delivery
 
 import (
-	"cpn-quiz-api-authentication-go/utils"
+	_utils "cpn-quiz-api-authentication-go/utils"
 	"fmt"
-	"net/http"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
-	"github.com/nqmt/goerror"
 )
 
 func (auth authDelivery) AuthToken(c echo.Context) error {
@@ -19,15 +17,19 @@ func (auth authDelivery) AuthToken(c echo.Context) error {
 
 	//=>Generate access token
 	result := auth.authUsecase.GenerateToken(claims)
-	if result.Error != nil {
+	result.Tx = auth.transId
+	response := _utils.Response(result)
+
+	if result.Errors != nil {
 		//=>Failure
-		auth.log.Error(tx, fmt.Sprintf("GenerateToken.Error: %s", result.Error.Error()))
+		for _, err := range result.Errors {
+			auth.log.Error(tx, fmt.Sprintf("GenerateToken.Error: %s", err))
+		}
 		auth.log.Error(tx, "End :: AuthToken")
-		return goerror.EchoErrorReturn(result.Error, c, tx)
+		return c.JSON(response.StatusCode, response)
 	}
 
 	//=>Done.
-	result.Tx = tx
 	auth.log.Info(tx, "End :: AuthToken")
-	return c.JSON(http.StatusOK, utils.Response(result))
+	return c.JSON(response.StatusCode, response)
 }

@@ -1,9 +1,9 @@
 package usecase
 
 import (
+	"cpn-quiz-api-authentication-go/constant"
 	"cpn-quiz-api-authentication-go/domain"
 	"cpn-quiz-api-authentication-go/logger"
-	"net/http"
 	"os"
 	"time"
 
@@ -63,18 +63,18 @@ func (auth *authUseCase) GenerateToken(payload jwt.MapClaims) domain.UseCaseResu
 
 	if err != nil {
 		//=>Generate error.
-		result.Error = err
-		result.StatusCode = http.StatusInternalServerError
+		result.Errors = append(result.Errors, err.Error())
+		result.StatusCode = constant.UnAuthorizationCode
+		result.Message = constant.UnAuthorization
 		result.Success = false
-		result.Message = err.Error()
 		return result
 	}
 
 	//=>Done.
 	result.Result = accessToken
 	result.Success = true
-	result.Message = "Authorize"
-	result.StatusCode = http.StatusOK
+	result.Message = constant.Success
+	result.StatusCode = constant.SuccessCode
 
 	return result
 }
