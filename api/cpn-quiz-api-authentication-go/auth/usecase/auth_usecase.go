@@ -71,8 +71,6 @@ func (auth *authUseCase) GenerateToken(payload jwt.MapClaims) domain.UseCaseResu
 			Audience:  audience,
 			ExpiresAt: &expireAt,
 		},
-		Sub: payload["sub"].(string),
-		Iat: time.Now().Unix(),
 	}
 
 	//=>Generate token by secretkey in db config.

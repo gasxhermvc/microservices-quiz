@@ -25,9 +25,4 @@ type Token struct {
 	UserInfo   *UserInfo   `json:"userInfo"`
 	Permission interface{} `json:"permission"`
 	jwt.RegisteredClaims
-	Sub string `json:"sub"`
-	Iat int64  `json:"iat"`
-	Exp int64  `json:"exp"`
-	Aud string `json:"aud"`
-	Iss string `json:"iss"`
 }
