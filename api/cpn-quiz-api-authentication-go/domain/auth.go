@@ -1,8 +1,6 @@
 package domain
 
 import (
-	"time"
-
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -27,8 +25,8 @@ type Token struct {
 	UserInfo   *UserInfo   `json:"userInfo"`
 	Permission interface{} `json:"permission"`
 	jwt.RegisteredClaims
-	Sub string    `json:"sub"`
-	Aud string    `json:"aud"`
-	Iat time.Time `json:"iat"`
-	Iss string    `json:"iss"`
+	Sub string `json:"sub"`
+	Aud string `json:"aud"`
+	Iat int    `json:"iat"`
+	Iss string `json:"iss"`
 }

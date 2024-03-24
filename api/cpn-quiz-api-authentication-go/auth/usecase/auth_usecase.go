@@ -56,7 +56,7 @@ func (auth *authUseCase) GenerateToken(payload jwt.MapClaims) domain.UseCaseResu
 		RegisteredClaims: jwt.RegisteredClaims{ExpiresAt: &expireAt},
 		Sub:              payload["sub"].(string),
 		Aud:              "cpn-quiz",
-		Iat:              time.Now(),
+		Iat:              time.Now().Second(),
 		Iss:              payload["iss"].(string),
 	}
 
