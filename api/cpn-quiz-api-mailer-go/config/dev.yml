@@ -3,10 +3,33 @@ build:
   author: gasxhermvc
 
 service:
-  name: cpn-quiz-api-api-mailer
+  name: cpn-quiz-api-mailer
   port: 80
   domain: localhost
-  endpoint: /cpn-quiz-api-api-mailer
+  endpoint: /cpn-quiz-api-mailer
 
 kibana:
-  suffix: cpn-quiz-api-api-mailer
+  suffix: cpn-quiz-api-mailer
+
+
+cpn:
+  quiz:
+    endpoint:
+     filemanage: "http://cpn-quiz-api-file-manage/cpn-quiz-api-file-manage"
+    format:
+      shortdate: "2006-01-02"
+      longdate: "2006-01-02 15:04:05"
+    fileserver:
+      parameter:
+        source: "app_file_source"
+        path: "app_file_path"
+        id: "app_file_id"
+        list: "app_file_list"
+        default: "default"
+    upload:
+      limit:
+        file: 5
+        perfile: 5242880
+        perrequest: 20971520
+    queue:
+      email: "send-email"

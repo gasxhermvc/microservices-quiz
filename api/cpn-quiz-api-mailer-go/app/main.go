@@ -10,15 +10,14 @@ import (
 	"os"
 	_ "time/tzdata"
 
-	_helloWorldDelivery "cpn-quiz-api-mailer-go/hello-world/delivery"
-	_helloWorldRepository "cpn-quiz-api-mailer-go/hello-world/repository"
-	_helloWorldUseCase "cpn-quiz-api-mailer-go/hello-world/usecase"
+	_emailDelivery "cpn-quiz-api-mailer-go/email/delivery"
+	_emailRepository "cpn-quiz-api-mailer-go/email/repository"
+	_emailUseCase "cpn-quiz-api-mailer-go/email/usecase"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	config "github.com/spf13/viper"
 	"github.com/tylerb/graceful"
-	// _appDataService "cpn-quiz-api-mailer-go/helpers/app-data-service"
 )
 
 var log = new(logger.PatternLogger).InitLogger("ALL", config.GetString("service.name"), logger.Service, logger.Database)
@@ -51,20 +50,25 @@ func main() {
 	db.Log = *log
 	dbConn := db.GetConnectionDB()
 
+	//=>Initial redis
+	rdb := database.RedisDatabase{}
+	rdb.Log = *log
+	rdbConn := rdb.GetConnectionRedisDB()
+
 	//=>new echo context
 	e := echo.New()
 
 	//=>set middleware
 	e.Use(middleware.CORS())
 	e.Use(middleware.Recover())
-	e.Use(middleware.BodyLimit("1M"))
+	e.Use(middleware.BodyLimit("50M"))
 
 	//=>domain data-access & business logic
-	helloWorldRepository := _helloWorldRepository.NewHelloWorldRepository(dbConn)
-	helloWorldUseCase := _helloWorldUseCase.NewHelloWorldUseCase(helloWorldRepository, log)
+	emailRepository := _emailRepository.NewEmailRepository(dbConn)
+	emailUseCase := _emailUseCase.NewEmailUseCase(emailRepository, rdbConn, log)
 
 	//=>domain delivery
-	_helloWorldDelivery.NewHelloWorldDelivery(e, helloWorldUseCase, log)
+	_emailDelivery.NewEmailDelivery(e, emailUseCase, log)
 
 	//=>launch server & port
 	e.Server.Addr = ":" + config.GetString("service.port")

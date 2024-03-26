@@ -19,7 +19,7 @@ func (access DirectoryAccess) Put(fileCollection map[string][]*multipart.FileHea
 	for param, files := range fileCollection {
 		for _, file := range files {
 			fileId := fmt.Sprintf("%s%s", generateRenameFile(), filepath.Ext(file.Filename))
-			path := access.ProtectionPublicPath(protectPath(filepath.Join(access.DestinationDirectory, fileId)))
+			path := protectPath(filepath.Join(access.Path, fileId))
 			result := FileStream{
 				FileId:         fileId,
 				FileParameter:  param,
@@ -315,5 +315,6 @@ func (access DirectoryAccess) IsDir() (bool, error) {
 
 // =>สำหรับ Display Response จะตัด Root path ออกให้
 func (access DirectoryAccess) ProtectionPublicPath(path string) string {
-	return cleansingPath(access.RootPath, path)
+	removePath := prettyPath(protectPath(access.RootPath))
+	return cleansingPath(removePath, path)
 }

@@ -15,6 +15,7 @@ type DirectoryAccessService struct {
 
 type DirectoryAccess struct {
 	RootPath             string
+	Path                 string
 	DestinationDirectory string
 	Permission           AccessPermission
 	FileList             []string
@@ -107,6 +108,7 @@ func (fs DirectoryAccessService) CreateAccessDirectory(source map[string]interfa
 	provider := DirectoryAccess{
 		DestinationDirectory: destinationPath,
 		RootPath:             rootPath,
+		Path:                 prettyPath(source[configuation.FilePathParameter].(string)),
 		Permission:           configuation.Permission,
 		FileList:             fileList,
 	}
