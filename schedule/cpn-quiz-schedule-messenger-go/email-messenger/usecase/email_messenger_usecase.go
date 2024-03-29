@@ -8,6 +8,7 @@ import (
 	"cpn-quiz-schedule-messenger-go/helpers/restful-service"
 	"cpn-quiz-schedule-messenger-go/logger"
 	"crypto/tls"
+	"fmt"
 	"io"
 	"strconv"
 	"strings"
@@ -122,6 +123,7 @@ func (sm *emailMessengerUseCase) SendEmail(provider *domain.EmailProvider) domai
 		for _, value := range provider.Parameter.Attachment {
 
 			buf, statusCode, err := rest.HttpGet(value.DownloadUrl, nil, value.Filename)
+			sm.log.Info(sm.transId, fmt.Sprintf("Buffer size: %d, Status code: %d", len(buf), statusCode))
 			if err != nil {
 				attachErrors = append(attachErrors, err.Error())
 				continue
