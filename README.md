@@ -23,6 +23,7 @@ github: gasxhermvc
 * 5. กำหนด Limit size ของ Request
 * 6. กำหนดนามสกุลไฟล์ที่อนุญาตให้อัปโหลดเสมอ
 * 7. กำหนด Limit จำนวนไฟล์ และขนาด File เสมอ
+* 10. Encode html สำหรับ Content ที่มีการ Input เข้ามาเพื่อป้องกัน XSS
 
 # เพื่อยกระดับ Performance โดยต่อยอดจาก Solution ปัจจุบัน
 * Note: หากคุณต้องการยกระดับ Performance ของ Mailer service คุณสามารถลด Process บางอย่างที่เกิดขึ้น เช่นการอัปโหลดไฟล์ไปที่ File manage service เพื่อจัดเก็บไฟล์ ซึ่งกระบวนการนี้สามารถลดลง โดยการ Config การ Mount path file ของ Docker ให้สามารถมองเห็น Folder จัดเก็บไฟล์ของ File manage service ซึ่งจะสามาถช่วยลด Letency ระหว่างการเชื่อมต่อลงได้

@@ -86,7 +86,7 @@ func (task *helloWorldTask) Run() {
 			}
 
 			if dequeue != "" {
-				task.log.Info(task.transId, fmt.Sprintf("For Test ===> Process Queue: %s"))
+				task.log.Info(task.transId, fmt.Sprintf("For Test ===> Process Queue: %s", dequeue))
 			}
 
 			var provider domain.EmailProvider
