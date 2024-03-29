@@ -1,0 +1,593 @@
+{
+	"info": {
+		"_postman_id": "833f9eb1-02ed-4414-8a5d-065609d912b8",
+		"name": "CPN",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6682602"
+	},
+	"item": [
+		{
+			"name": "keycloak",
+			"item": [
+				{
+					"name": ".well-known",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url_keycloak}}/realms/cpn-quiz/.well-known/openid-configuration",
+							"host": [
+								"{{url_keycloak}}"
+							],
+							"path": [
+								"realms",
+								"cpn-quiz",
+								".well-known",
+								"openid-configuration"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = JSON.parse(pm.response.text())\r",
+									"pm.variables.set(\"keycloak_access_token\", response.access_token)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "gasxhermvc",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "1234",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "cpn-quiz",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "hvZiMT7z6mKeKFyl7GYY8gIUGlUzJjY7",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "email openid roles profile",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url_keycloak}}/realms/cpn-quiz/protocol/openid-connect/token",
+							"host": [
+								"{{url_keycloak}}"
+							],
+							"path": [
+								"realms",
+								"cpn-quiz",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user-info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{keycloak_access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url_keycloak}}/realms/cpn-quiz/protocol/openid-connect/userinfo",
+							"host": [
+								"{{url_keycloak}}"
+							],
+							"path": [
+								"realms",
+								"cpn-quiz",
+								"protocol",
+								"openid-connect",
+								"userinfo"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "authentication-service",
+			"item": [
+				{
+					"name": "token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = JSON.parse(pm.response.text())\r",
+									"pm.variables.set(\"access_token\", response.responseData)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{keycloak_access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url_authentication}}/cpn-quiz-api-authentication/auth/token",
+							"host": [
+								"{{url_authentication}}"
+							],
+							"path": [
+								"cpn-quiz-api-authentication",
+								"auth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "file-manage-service",
+			"item": [
+				{
+					"name": "upload",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-client-id",
+								"value": "cpn-file-manage",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "x-api-key",
+								"value": "4t2eKCkunE50EqNqktBe0QKcadbp4AM60xWimdn9X8DLqdcmNKHYqu6L1nriREB9",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "app_file_source",
+									"value": "email",
+									"type": "text"
+								},
+								{
+									"key": "app_file_path",
+									"value": "20240324",
+									"type": "text"
+								},
+								{
+									"key": "upload",
+									"type": "file",
+									"src": [
+										"/C:/Users/006006/Downloads/ZPSI008_C66ACHRCS0423_08032024_012453.pdf",
+										"/C:/Users/006006/Downloads/ZPSI008_I67KTALOM192320_08032024_012449.pdf",
+										"/C:/Users/006006/Downloads/20240325_002.zip"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url_filemanage}}/cpn-quiz-api-file-manage/upload",
+							"host": [
+								"{{url_filemanage}}"
+							],
+							"path": [
+								"cpn-quiz-api-file-manage",
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "remove",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-client-id",
+								"value": "cpn-file-manage",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "4t2eKCkunE50EqNqktBe0QKcadbp4AM60xWimdn9X8DLqdcmNKHYqu6L1nriREB9",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{url_filemanage}}/cpn-quiz-api-file-manage/remove?app_file_source=email&app_file_path=20240324&app_file_list=20240324051011-607.OK,20240324051011-590.pdf",
+							"host": [
+								"{{url_filemanage}}"
+							],
+							"path": [
+								"cpn-quiz-api-file-manage",
+								"remove"
+							],
+							"query": [
+								{
+									"key": "app_file_source",
+									"value": "email"
+								},
+								{
+									"key": "app_file_path",
+									"value": "20240324"
+								},
+								{
+									"key": "app_file_id",
+									"value": "20240324092422-870.pdf",
+									"disabled": true
+								},
+								{
+									"key": "app_file_list",
+									"value": "20240324051011-607.OK,20240324051011-590.pdf"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "preview",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{url_filemanage}}/cpn-quiz-api-file-manage/preview?app_file_source=email&app_file_path=20240324&app_file_id=20240325013301-583.pdf",
+							"host": [
+								"{{url_filemanage}}"
+							],
+							"path": [
+								"cpn-quiz-api-file-manage",
+								"preview"
+							],
+							"query": [
+								{
+									"key": "app_file_source",
+									"value": "email"
+								},
+								{
+									"key": "app_file_path",
+									"value": "20240324"
+								},
+								{
+									"key": "app_file_id",
+									"value": "20240325013301-583.pdf"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "download",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{url_filemanage}}/cpn-quiz-api-file-manage/download?app_file_source=email&app_file_path=20240324&app_file_id=20240324092422-870.pdf",
+							"host": [
+								"{{url_filemanage}}"
+							],
+							"path": [
+								"cpn-quiz-api-file-manage",
+								"download"
+							],
+							"query": [
+								{
+									"key": "app_file_source",
+									"value": "email"
+								},
+								{
+									"key": "app_file_path",
+									"value": "20240324"
+								},
+								{
+									"key": "app_file_id",
+									"value": "20240324092422-870.pdf"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "mailer-service",
+			"item": [
+				{
+					"name": "send-email",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "FROM",
+									"value": "from@example.com",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "TO",
+									"value": "thanamet.t@cdg.co.th",
+									"type": "text"
+								},
+								{
+									"key": "CC",
+									"value": "thanatmet.t@cdg.co.th",
+									"type": "text"
+								},
+								{
+									"key": "BCC",
+									"value": "bcc@example.com",
+									"type": "text"
+								},
+								{
+									"key": "SUBJECT",
+									"value": "[ทดสอบ]: Helloworld",
+									"type": "text"
+								},
+								{
+									"key": "BODY",
+									"value": "<h1>HelloWorld!!!!</h1>",
+									"type": "text"
+								},
+								{
+									"key": "PRIORITY",
+									"value": " normal",
+									"type": "text"
+								},
+								{
+									"key": "ATTACHMENTS",
+									"type": "file",
+									"src": "/C:/Users/006006/Downloads/1709823011214.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url_mailer}}/cpn-quiz-api-mailer/send-email",
+							"host": [
+								"{{url_mailer}}"
+							],
+							"path": [
+								"cpn-quiz-api-mailer",
+								"send-email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "send-email-test",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url_mailer}}/cpn-quiz-api-mailer/send-email-test",
+							"host": [
+								"{{url_mailer}}"
+							],
+							"path": [
+								"cpn-quiz-api-mailer",
+								"send-email-test"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "attachment",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{url_mailer}}/cpn-quiz-api-mailer/attachments/20240324/20240325013301-583.pdf",
+							"host": [
+								"{{url_mailer}}"
+							],
+							"path": [
+								"cpn-quiz-api-mailer",
+								"attachments",
+								"20240324",
+								"20240325013301-583.pdf"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://cpn-quiz-dev.gasxhermvc.local/api",
+			"type": "string"
+		},
+		{
+			"key": "url_keycloak",
+			"value": "http://cpn-quiz-dev.gasxhermvc.local:8080",
+			"type": "string"
+		},
+		{
+			"key": "keycloak_access_token",
+			"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJZQnF2aVV3cnpuRmRYSjBjb3FsQkJCU1NiQWVuaGNVRnk0dE1iNFM0RW5rIn0.eyJleHAiOjE3MTA3NzgzMTcsImlhdCI6MTcxMDc3ODAxNywianRpIjoiOWVkY2UyYzQtZDQyZi00ODQxLWFiMjUtZDUyMzBjZDFkYjVmIiwiaXNzIjoiaHR0cDovL2Nwbi1xdWl6LWRldi5nYXN4aGVybXZjLmxvY2FsOjgwODAvcmVhbG1zL2Nwbi1xdWl6IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjMxYjYyOWUzLWYwYjUtNGNjNC04N2U3LWY5ZDgzMWY3MThlZCIsInR5cCI6IkJlYXJlciIsImF6cCI6ImNwbi1xdWl6Iiwic2Vzc2lvbl9zdGF0ZSI6Ijk1NTRiYzllLTNlYmQtNGUwYi1hMjI2LWY1MDNlMjBjZGY4ZCIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiY3BuLXF1aXotZGV2Lmdhc3hoZXJtdmMubG9jYWwiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImNwbi1xdWl6LWFwaS1tYWlsZXItY3JlYXRlIiwiY3BuLXF1aXotYXBpLWZpbGUtbWFuYWdlLWRlbGV0ZSIsImNwbi1xdWl6LWFwaS1maWxlLW1hbmFnZS11cGRhdGUiLCJkZWZhdWx0LXJvbGVzLWNwbi1xdWl6IiwiY3BuLXF1aXotYXBpLWF1dGhlbnRpY2F0aW9uLWNyZWF0ZSIsImNwbi1xdWl6LWFwaS1tYWlsZXItcXVlcnkiLCJjcG4tcXVpei1hcGktYXV0aGVudGljYXRpb24tdXBkYXRlIiwiY3BuLXF1aXotYXBpLW1haWxlci11cGRhdGUiLCJjcG4tcXVpei1hcGktZmlsZS1tYW5hZ2UtY3JlYXRlIiwiY3BuLXF1aXotYXBpLWF1dGhlbnRpY2F0aW9uLWRlbGV0ZSIsImNwbi1xdWl6LWFwaS1hdXRoZW50aWNhdGlvbi1xdWVyeSIsIm9mZmxpbmVfYWNjZXNzIiwiY3BuLXF1aXotYXBpLWZpbGUtbWFuYWdlLXF1ZXJ5IiwidW1hX2F1dGhvcml6YXRpb24iLCJjcG4tcXVpei1hcGktbWFpbGVyLWRlbGV0ZSJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHByb2ZpbGUiLCJzaWQiOiI5NTU0YmM5ZS0zZWJkLTRlMGItYTIyNi1mNTAzZTIwY2RmOGQiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJnYXN4aGVybXZjIG12YyIsInByZWZlcnJlZF91c2VybmFtZSI6Imdhc3hoZXJtdmMiLCJnaXZlbl9uYW1lIjoiZ2FzeGhlcm12YyIsImZhbWlseV9uYW1lIjoibXZjIiwiZW1haWwiOiJkZXYuYXdlc29tZS50aEBnbWFpbC5jb20ifQ.mIZwyRwzTHJQ-Mk4kW4GkeU2uAGS1M0abupJQZh9VYGwOxWY2JWUNv80GX8DUo_GT_1I4_rOxlQdO9pJF5kiCTugLgs6lsb2efcpngsFvkWwyU966Jg5vpFe9J0Ch8DTimgrSeYww-_2QOkbOusqaCJSRq80CJAs-QJWpWFUv8vhx6QltWPqZxyuGV4-Xb_ESJDeZoBun0I9Ym5OI3TL9uMqFLXvMMzNkwQ1pZyMoOdXdbL4SUpXK2CK8v6gisS0k5AtQoRVsetQBbZXNygAvLV7b7Z10eW6LDnYrv7Y7SQhpkZCw7JZa1ZKztLK-Pd0pl9qTB0cmXzMST7LA7knVA",
+			"type": "string"
+		},
+		{
+			"key": "access_token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imdhc3hoZXJtdmMiLCJ1c2VySW5mbyI6eyJwcmVmZXJyZWRfdXNlcm5hbWUiOiJnYXN4aGVybXZjIiwiZW1haWwiOiJkZXYuYXdlc29tZS50aEBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiZ2FzeGhlcm12YyIsImZhbWlseV9uYW1lIjoibXZjIiwic3ViIjoiMzFiNjI5ZTMtZjBiNS00Y2M0LTg3ZTctZjlkODMxZjcxOGVkIn0sImlzRW1wbG95ZWUiOmZhbHNlLCJwZXJtaXNzaW9uIjp7InJvbGVzIjpbImNwbi1xdWl6LWFwaS1tYWlsZXItY3JlYXRlIiwiY3BuLXF1aXotYXBpLWZpbGUtbWFuYWdlLWRlbGV0ZSIsImNwbi1xdWl6LWFwaS1maWxlLW1hbmFnZS11cGRhdGUiLCJkZWZhdWx0LXJvbGVzLWNwbi1xdWl6IiwiY3BuLXF1aXotYXBpLWF1dGhlbnRpY2F0aW9uLWNyZWF0ZSIsImNwbi1xdWl6LWFwaS1tYWlsZXItcXVlcnkiLCJjcG4tcXVpei1hcGktYXV0aGVudGljYXRpb24tdXBkYXRlIiwiY3BuLXF1aXotYXBpLW1haWxlci11cGRhdGUiLCJjcG4tcXVpei1hcGktZmlsZS1tYW5hZ2UtY3JlYXRlIiwiY3BuLXF1aXotYXBpLWF1dGhlbnRpY2F0aW9uLWRlbGV0ZSIsImNwbi1xdWl6LWFwaS1hdXRoZW50aWNhdGlvbi1xdWVyeSIsIm9mZmxpbmVfYWNjZXNzIiwiY3BuLXF1aXotYXBpLWZpbGUtbWFuYWdlLXF1ZXJ5IiwidW1hX2F1dGhvcml6YXRpb24iLCJjcG4tcXVpei1hcGktbWFpbGVyLWRlbGV0ZSJdfSwiZXhwIjoxNzExMjY1ODg2fQ.0NoHtaWzv78ae6Ipj_-U7k_QX65CQJh29mJep2Oq5QA",
+			"type": "string"
+		},
+		{
+			"key": "url_local",
+			"value": "http://localhost:8011",
+			"type": "string"
+		}
+	]
+}

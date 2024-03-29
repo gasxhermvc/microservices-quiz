@@ -29,7 +29,7 @@ services:
       - 9443:9443
     command: --http-enabled
     volumes:
-      - ./portainer/portainer_data:/data
+      - ./monitoring/portainer/portainer_data:/data
       - /var/run/docker.sock:/var/run/docker.sock
     restart: always
 
