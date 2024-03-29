@@ -2,6 +2,7 @@ package main
 
 import (
 	"cpn-quiz-api-mailer-go/database"
+	"net/http"
 
 	"cpn-quiz-api-mailer-go/logger"
 	"time"
@@ -59,6 +60,25 @@ func main() {
 	e := echo.New()
 
 	//=>set middleware
+	config := middleware.RateLimiterConfig{
+		Skipper: middleware.DefaultSkipper,
+		Store: middleware.NewRateLimiterMemoryStoreWithConfig(
+			middleware.RateLimiterMemoryStoreConfig{Rate: 5, Burst: 30, ExpiresIn: 60 * time.Second},
+		),
+		IdentifierExtractor: func(ctx echo.Context) (string, error) {
+			id := ctx.RealIP()
+			return id, nil
+		},
+		ErrorHandler: func(context echo.Context, err error) error {
+			return context.JSON(http.StatusForbidden, nil)
+		},
+		DenyHandler: func(context echo.Context, identifier string, err error) error {
+			return context.JSON(http.StatusTooManyRequests, nil)
+		},
+	}
+
+	//=>5 attempt for 60 sec.
+	e.Use(middleware.RateLimiterWithConfig(config))
 	e.Use(middleware.CORS())
 	e.Use(middleware.Recover())
 	e.Use(middleware.BodyLimit("50M"))
