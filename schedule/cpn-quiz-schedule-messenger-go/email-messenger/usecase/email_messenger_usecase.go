@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"context"
 	"cpn-quiz-schedule-messenger-go/constant"
 	"cpn-quiz-schedule-messenger-go/database"
 	"cpn-quiz-schedule-messenger-go/domain"
@@ -20,7 +19,6 @@ import (
 )
 
 var rest *restful.Restful = restful.NewRestful(new(logger.PatternLogger), uuid.New().String())
-var ctx = context.Background()
 
 type emailMessengerUseCase struct {
 	emailMessengerRepository domain.EmailMessengerRepository
