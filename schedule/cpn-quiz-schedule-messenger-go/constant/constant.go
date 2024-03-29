@@ -7,23 +7,18 @@ const (
 )
 
 const (
-	Success                  string = "Success"
-	SuccessCode              string = "200"
-	InternalServerError      string = "Internal Server Error"
-	InternalServerErrorCode  string = "500"
-	NotFound                 string = "Data Not Found"
-	NotFoundCode             string = "404"
-	BadRequest               string = "Bad Request"
-	BadRequestCode           string = "400"
-	UnproccessableEntity     string = "Unproccessable Entity"
-	UnproccessableEntityCode string = "422"
-)
-
-const (
-	Fail string = "fail"
-)
-const (
-	LOG_SUCESS     int = 1
-	LOG_FAIL       int = 2
-	LOG_INPROGRESS int = 3
+	Success                 string = "Success"
+	SuccessCode             string = "200"
+	BadRequest              string = "Bad Request"
+	BadRequestCode          string = "400"
+	UnAuthorization         string = "Un Authorization"
+	UnAuthorizationCode     string = "401"
+	AccessDenied            string = "Access Denied"
+	AccessDeniedCode        string = "403"
+	NotFound                string = "Data Not Found"
+	NotFoundCode            string = "404"
+	InternalServerError     string = "Internal Server Error"
+	InternalServerErrorCode string = "500"
+	ServiceUnavailable      string = "Service Unavailable"
+	ServiceUnavailableCode  string = "503"
 )

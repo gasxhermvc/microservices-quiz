@@ -10,3 +10,21 @@ service:
 
 kibana:
   suffix: cpn-quiz-schedule-messenger
+
+cpn:
+  quiz:
+    queue:
+      email: "send-email"
+    endpoint:
+     filemanage: "http://cpn-quiz-api-file-manage/cpn-quiz-api-file-manage"
+    format:
+      shortdate: "2006-01-02"
+      longdate: "2006-01-02 15:04:05"
+    fileserver:
+      parameter:
+        source: "app_file_source"
+        path: "app_file_path"
+        id: "app_file_id"
+        list: "app_file_list"
+        default: "default"
+

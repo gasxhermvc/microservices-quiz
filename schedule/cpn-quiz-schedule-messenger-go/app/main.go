@@ -4,16 +4,17 @@ import (
 	"cpn-quiz-schedule-messenger-go/database"
 	"cpn-quiz-schedule-messenger-go/logger"
 	"cpn-quiz-schedule-messenger-go/task"
+
+	_emailMessengerRepository "cpn-quiz-schedule-messenger-go/email-messenger/repository"
+	_emailMessengerUseCase "cpn-quiz-schedule-messenger-go/email-messenger/usecase"
+
 	"fmt"
 	"os"
 	"time"
 	_ "time/tzdata"
 
-	_helloWorldDelivery "cpn-quiz-schedule-messenger-go/hello-world/delivery"
-	_helloWorldRepository "cpn-quiz-schedule-messenger-go/hello-world/repository"
-	_helloWorldUseCase "cpn-quiz-schedule-messenger-go/hello-world/usecase"
-
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/robfig/cron"
 	config "github.com/spf13/viper"
 	"github.com/tylerb/graceful"
@@ -50,17 +51,27 @@ func main() {
 	db.Log = *log
 	dbConn := db.GetConnectionDB()
 
+	//=>Initial redis
+	rdb := database.RedisDatabase{}
+	rdb.Log = *log
+	rdbConn := rdb.GetConnectionRedisDB()
+
+	//=>new echo context
 	e := echo.New()
 
-	helloWorldRepository := _helloWorldRepository.NewHelloWorldRepository(dbConn)
-	helloWorldUseCase := _helloWorldUseCase.NewHelloWorldUseCase(helloWorldRepository, log)
-	_helloWorldDelivery.NewHelloWorldDelivery(e, helloWorldUseCase, log)
+	//=>set middleware
+	e.Use(middleware.CORS())
+	e.Use(middleware.Recover())
+	e.Use(middleware.BodyLimit("50M"))
 
-	task.NewHelloWorldHandler(helloWorldUseCase, log, cronJobs)
+	emailMessengerRepository := _emailMessengerRepository.NewEmailMessengerRepository(dbConn)
+	emailMessengerUseCase := _emailMessengerUseCase.NewEmailMessengerUseCase(emailMessengerRepository, rdbConn, log)
 
+	task.NewHelloWorldHandler(emailMessengerUseCase, rdbConn, log, cronJobs)
+	cronJobs.Run() //=>First run
+	//=>launch server & port
 	e.Server.Addr = ":" + config.GetString("service.port")
-	err := graceful.ListenAndServe(e.Server, 5*time.Second)
-	if err != nil {
+	if err := graceful.ListenAndServe(e.Server, 5*time.Second); err != nil {
 		panic(err)
 	}
 }

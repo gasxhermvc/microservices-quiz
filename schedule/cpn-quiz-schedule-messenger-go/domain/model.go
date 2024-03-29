@@ -1,48 +1,45 @@
 package domain
 
-import "github.com/golang-jwt/jwt"
+import "github.com/golang-jwt/jwt/v5"
+
+type Response struct {
+	TransactionId string      `json:"transactionId"`
+	Message       string      `json:"msg"`
+	Code          string      `json:"code"`
+	ResponseData  interface{} `json:"responseData,omitempty"`
+	StatusCode    int         `json:"-"`
+	ErrorResponse
+}
+
+type ErrorResponse struct {
+	Error []string `json:"errors,omitempty"`
+}
 
 type Token struct {
-	Username   string    `json:"username"`
-	UserInfo   *UserInfo `json:"userInfo"`
-	IsEmployee bool      `json:"isEmployee"`
-	jwt.StandardClaims
+	Username   string      `json:"username"`
+	UserInfo   *UserInfo   `json:"userInfo"`
+	Permission Permissions `json:"permission"`
+	jwt.RegisteredClaims
 }
 
 type UserInfo struct {
-	EmpID          int     `json:"emp_id"`
-	TitleSDesc     string  `json:"title_s_desc"`
-	FirstName      string  `json:"first_name"`
-	LastName       string  `json:"last_name"`
-	EngNameFull    string  `json:"eng_name_full"`
-	PosiText       string  `json:"posi_text"`
-	PlansTextShort string  `json:"plans_text_short"`
-	LevelCode      string  `json:"level_code"`
-	DeptChangeCode string  `json:"dept_change_code"`
-	DeptSap        int     `json:"dept_sap"`
-	Email          string  `json:"email"`
-	DepShort3      *string `json:"dept_short3"`
-	DepShort4      *string `json:"dept_short4"`
+	PreferredUsername string `json:"preferred_username"`
+	Email             string `json:"email"`
+	GivenName         string `json:"given_name"`
+	FamilyName        string `json:"family_name"`
+	Sub               string `json:"sub"`
 }
 
-type LogProgramStatusStore struct {
-	PROGRAM_ID    int    `json:"PROGRAM_ID"`
-	PROGRAM_NAME  string `json:"PROGRAM_NAME"`
-	PROGRAM_TYPE  string `json:"PROGRAM_TYPE"`
-	LAST_RUN_DATE string `json:"LAST_RUN_DATE"`
-	STATUS_ID     int    `json:"STATUS_ID"`
-	STATUS_NAME   string `json:"STATUS_NAME"`
-	TOTAL         int    `json:"TOTAL"`
-	TOTAL_SUCCESS int    `json:"TOTAL_SUCCESS"`
-	TOTAL_ERROR   int    `json:"TOTAL_ERROR"`
+type Permissions struct {
+	Roles []string `json:"roles"`
 }
 
-type DataDetailStore struct {
-	ID string `json:"ID"`
-}
-
-type Response struct {
-	TransactionId string `json:"transactionId"`
-	Message       string `json:"msg"`
-	Code          string `json:"code"`
+//=>App struct.
+type UseCaseResult struct {
+	Result     interface{}
+	Errors     []string
+	Success    bool
+	Message    string
+	StatusCode string
+	Tx         string
 }

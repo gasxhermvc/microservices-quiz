@@ -16,13 +16,12 @@ RUN go mod download
 COPY . .
 
 RUN go build -trimpath -ldflags "-s -w -extldflags '-static'" -o main app/main.go
-
 FROM scratch
 
-# COPY --from=builder /app/main .
-# COPY --from=builder /app/config ./config/
-# COPY --from=builder /app/.env.yml ./.env.yml
-# COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+COPY --from=builder /app/main .
+COPY --from=builder /app/config ./config/
+COPY --from=builder /app/.env.prod.yml ./.env.yml
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
 ENV TZ=Asia/Bangkok
 ENTRYPOINT ["./main", "prod"]

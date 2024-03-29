@@ -26,7 +26,7 @@ func (rdb *RedisDatabase) GetConnectionRedisDB() *RedisDatabase {
 // =>Connection
 func (rdb *RedisDatabase) initRedisConnect() *redis.Client {
 	return redis.NewClient(&redis.Options{
-		Addr:     config.GetString("cpn.quiz.redis.client.addrs"),
+		Addr:     config.GetString("cpn.quiz.redis.client.addr"),
 		Password: config.GetString("cpn.quiz.redis.client.password"),
 		DB:       0,
 	})
