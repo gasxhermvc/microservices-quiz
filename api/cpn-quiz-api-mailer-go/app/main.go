@@ -60,7 +60,7 @@ func main() {
 	e := echo.New()
 
 	//=>set middleware
-	config := middleware.RateLimiterConfig{
+	rateLimitConfig := middleware.RateLimiterConfig{
 		Skipper: middleware.DefaultSkipper,
 		Store: middleware.NewRateLimiterMemoryStoreWithConfig(
 			middleware.RateLimiterMemoryStoreConfig{Rate: 5, Burst: 30, ExpiresIn: 60 * time.Second},
@@ -78,7 +78,7 @@ func main() {
 	}
 
 	//=>5 attempt for 60 sec.
-	e.Use(middleware.RateLimiterWithConfig(config))
+	e.Use(middleware.RateLimiterWithConfig(rateLimitConfig))
 	e.Use(middleware.CORS())
 	e.Use(middleware.Recover())
 	e.Use(middleware.BodyLimit("50M"))
